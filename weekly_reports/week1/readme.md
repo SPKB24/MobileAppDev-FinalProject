@@ -38,13 +38,13 @@ return responses.get(0);
 ## Accomplishes This Week
 
 ### Dave
-Optimized vertical scaling of the business model also brainstormed new project ideas
+Designed backend design for custom ML model
 
 ### Sohit
 Created Android application for hackathon in which we used the Clarifai api to recognize image contents
 
 ### Mike
-Looked at possible API's to better fit our needs for this project
+Looked at possible APIs to better fit our needs for this project
 
 ## Challenges & Blocks
 
@@ -60,7 +60,7 @@ Coming to the hackathon
 ## Plan for Next Week
 
 ### Dave
-Layout
+Design initial layouts
 
 ### Sohit
 Backend stuff
