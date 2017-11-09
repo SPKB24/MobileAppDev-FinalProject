@@ -38,7 +38,7 @@ return responses.get(0);
 ## Accomplishes This Week
 
 ### Dave
-Designed backend design for custom ML model
+Designed custom ML model based on Google Vision and Clarifai
 
 ### Sohit
 Stubbed out backend lifecycle stages for Android App
