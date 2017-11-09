@@ -2,10 +2,11 @@
 
 ## Weekly notes
 
+Clarifai
 ```Java
 public ClarifaiOutput<Concept> predictWithImage(File file) {
     final List<ClarifaiOutput<Concept>> res =
-            client.getDefaultModels().generalModel() // You can also do client.getModelByID("id") to get your custom models
+            client.getDefaultModels().labelModel()
                     .predict()
                     .withInputs(ClarifaiInput.forImage(file))
                     .executeSync()
@@ -16,6 +17,22 @@ public ClarifaiOutput<Concept> predictWithImage(File file) {
     }
     return res.get(0);
 }
+```
+vs
+Google Vision
+```Java
+List<AnnotateImageRequest> requests = new ArrayList<>();
+Image img = Image.newBuilder().setContent(imgBytes).build();
+Feature feat = Feature.newBuilder().setType(Type.LABEL_DETECTION).build();
+AnnotateImageRequest request = AnnotateImageRequest.newBuilder()
+  .addFeatures(feat)
+  .setImage(img)
+  .build();
+requests.add(request);
+
+BatchAnnotateImagesResponse response = vision.batchAnnotateImages(requests);
+List<AnnotateImageResponse> responses = response.getResponsesList();
+return responses.get(0);
 ```
 
 ## Accomplishes This Week
