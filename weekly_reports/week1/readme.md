@@ -35,7 +35,7 @@ List<AnnotateImageResponse> responses = response.getResponsesList();
 return responses.get(0);
 ```
 
-## Accomplishes This Week
+## Accomplished This Week
 
 ### Dave
 Designed custom ML model based on Google Vision and Clarifai
