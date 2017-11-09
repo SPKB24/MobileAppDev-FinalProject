@@ -41,29 +41,7 @@ return responses.get(0);
 Designed backend design for custom ML model
 
 ### Sohit
-Created Android application for hackathon in which we used the Clarifai api to recognize image contents
+Stubbed out backend lifecycle stages for Android App
 
 ### Mike
-Looked at possible APIs to better fit our needs for this project
-
-## Challenges & Blocks
-
-### Dave
-Dave never has challenges
-
-### Sohit
-Finding proper keywords from Clarifai API sometimes gave issues, needed to add further backend processing to correctly determine Recyclable, Compostable, or Garbage
-
-### Mike
-Coming to the hackathon
-
-## Plan for Next Week
-
-### Dave
-Design initial layouts
-
-### Sohit
-Backend stuff
-
-### Mike
-API stuff
+Researched API services for OCR (Optical Character Recognition)
