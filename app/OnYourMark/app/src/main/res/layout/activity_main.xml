@@ -1,18 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_centerHorizontal="true"
     tools:context="com.example.mikezurawski.onyourmark.MainActivity">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Hello World!"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <ImageView
+        android:id="@+id/logo"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_marginTop="30dp"
+        android:contentDescription="@string/logo_description"
+        android:src="@android:drawable/ic_menu_camera"/>
 
-</android.support.constraint.ConstraintLayout>
+    <TextView
+        android:id="@+id/app_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/logo"
+        android:padding="16dp"
+        android:paddingTop="40dp"
+        android:text="@string/app_title" />
+
+    <Button style="@style/button_style"
+        android:id="@+id/view_budget_btn"
+        android:text="@string/view_budget"
+        android:layout_above="@+id/add_budget_item_btn"/>
+    
+    <Button style="@style/button_style"
+        android:id="@+id/add_budget_item_btn"
+        android:text="@string/add_budget_item"
+        android:layout_alignParentBottom="true" />
+
+</RelativeLayout>
