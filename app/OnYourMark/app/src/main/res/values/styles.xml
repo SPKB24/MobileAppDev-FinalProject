@@ -18,6 +18,7 @@
     </style>
 
     <style name="button_style">
+        <!--<item name="android:padding">16dp</item>-->
         <item name="android:backgroundTint">@color/colorPrimary</item>
         <item name="android:layout_height">@dimen/btn_height</item>
         <item name="android:layout_width">match_parent</item>
