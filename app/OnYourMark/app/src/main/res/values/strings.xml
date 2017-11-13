@@ -1,7 +1,15 @@
 <resources>
     <string name="app_name">OnYourMark</string>
-    <string name="app_title">Welcome to Mark\'s World</string>
+    <string name="app_title">On Your Mark</string>
     <string name="view_budget">View Budget</string>
     <string name="add_budget_item">Add Item</string>
+    <string name="view_leftovers">View Leftovers</string>
+    <string name="view_breakdown">View Breakdown</string>
     <string name="logo_description">OnYourMark Logo</string>
+    <string name="title_activity_main2">Main2Activity</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
 </resources>

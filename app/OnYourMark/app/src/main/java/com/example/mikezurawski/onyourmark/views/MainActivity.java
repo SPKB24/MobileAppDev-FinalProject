@@ -1,5 +1,6 @@
 package com.example.mikezurawski.onyourmark.views;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -39,6 +40,24 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 displayAllData();
+            }
+        });
+
+        Button viewLeftoversBtn = (Button) findViewById(R.id.view_leftovers_btn);
+        viewLeftoversBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this, ViewBudgetActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        Button viewBreakdownBtn = (Button) findViewById(R.id.view_breakdown_btn);
+        viewBreakdownBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this, BreakdownActivity.class);
+                startActivity(intent);
             }
         });
 

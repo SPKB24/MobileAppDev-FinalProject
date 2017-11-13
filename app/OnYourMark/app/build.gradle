@@ -20,6 +20,7 @@ android {
 }
 
 dependencies {
+    implementation 'com.android.support:design:26.1.0'
     compile fileTree(dir: 'libs', include: ['*.jar'])
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
@@ -30,4 +31,6 @@ dependencies {
 
     compile 'com.irozon.sneaker:sneaker:1.0.1'
     compile 'com.mindorks:paracamera:0.2.2'
+    compile 'com.github.PhilJay:MPAndroidChart:v3.0.2'
+
 }
