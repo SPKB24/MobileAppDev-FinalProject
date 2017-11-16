@@ -21,16 +21,16 @@ android {
 
 dependencies {
     implementation 'com.android.support:design:26.1.0'
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    compile 'com.android.support:appcompat-v7:26.+'
-    compile 'com.android.support.constraint:constraint-layout:1.0.2'
-    testCompile 'junit:junit:4.12'
+    implementation 'com.android.support:appcompat-v7:26.+'
+    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
+    testImplementation 'junit:junit:4.12'
 
-    compile 'com.irozon.sneaker:sneaker:1.0.1'
-    compile 'com.mindorks:paracamera:0.2.2'
-    compile 'com.github.PhilJay:MPAndroidChart:v3.0.2'
-
+    implementation 'com.microsoft.projectoxford:vision:1.0.393'
+    implementation 'com.irozon.sneaker:sneaker:1.0.1'
+    implementation 'com.mindorks:paracamera:0.2.2'
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.0.2'
 }
