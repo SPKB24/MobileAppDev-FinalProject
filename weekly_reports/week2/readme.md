@@ -8,6 +8,8 @@ Researched and decided on a OCR based API to use - Microsoft Azure
 
 ### Dave
 
+![Main Menu]("menu.png")
+
 ### Mark
 
 ### Sohit
