@@ -13,6 +13,9 @@ Researched and decided on a OCR based API to use - Microsoft Azure
 
 ### Mark
 
+- Implemented Microsoft Azure Computer Vision API
+- Added ability to take photo of receipt, have it analyzed and return results
+
 ### Sohit
 * Created Object classes and SQLite database for the information that we want to store.
 
