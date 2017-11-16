@@ -11,7 +11,7 @@ Researched and decided on a OCR based API to use - Microsoft Azure
  - Created layouts for main menu, monthly check-in, and monthly breakdown
  - Created hooks for each layout to be updated via backend code
 
-### Mark
+### Mike
 
 - Implemented Microsoft Azure Computer Vision API
 - Added ability to take photo of receipt, have it analyzed and return results
