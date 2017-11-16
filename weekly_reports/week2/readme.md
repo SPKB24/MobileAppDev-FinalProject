@@ -8,7 +8,7 @@ Researched and decided on a OCR based API to use - Microsoft Azure
 
 ### Dave
 
-![Main Menu]("menu.png")
+![alt tag](https://github.com/uml-app1-2017/final-project-team-mark-final/blob/master/weekly_reports/week2/menu.png)
 
 ### Mark
 
