@@ -8,7 +8,8 @@ Researched and decided on a OCR based API to use - Microsoft Azure
 
 ### Dave
 
-![alt tag](https://github.com/uml-app1-2017/final-project-team-mark-final/blob/master/weekly_reports/week2/menu.png)
+ - Created layouts for main menu, monthly check-in, and monthly breakdown
+ - Created hooks for each layout to be updated via backend code
 
 ### Mark
 
