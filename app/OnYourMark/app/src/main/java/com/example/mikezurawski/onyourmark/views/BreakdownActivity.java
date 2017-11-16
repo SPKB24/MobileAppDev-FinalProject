@@ -26,10 +26,12 @@ public class BreakdownActivity extends AppCompatActivity {
 
         List<PieEntry> entries = new ArrayList<>();
 
-        entries.add(new PieEntry(60.5f, ""));
-        entries.add(new PieEntry(39.5f, ""));
+        entries.add(new PieEntry(45.5f, ""));
+        entries.add(new PieEntry(10.5f, ""));
+        entries.add(new PieEntry(30.0f, ""));
+        entries.add(new PieEntry(10.4f, ""));
 
-        final int[] MY_COLORS = {Color.BLUE, Color.RED};
+        final int[] MY_COLORS = {Color.BLUE, Color.RED, Color.CYAN, Color.YELLOW};
         ArrayList<Integer> colors = new ArrayList<Integer>();
 
         for(int c: MY_COLORS) colors.add(c);

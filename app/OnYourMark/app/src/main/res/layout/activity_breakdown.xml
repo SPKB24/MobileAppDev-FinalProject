@@ -42,24 +42,84 @@
         android:layout_height="150dp" />
 
     <LinearLayout
-        android:orientation="vertical"
+        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <TextView
             style="@style/mega_text"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Food"/>
+        <View
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
         <TextView
             style="@style/mega_text"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="$275.45"/>
+    </LinearLayout>
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            style="@style/mega_text"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Clothes"/>
+        <View
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
         <TextView
             style="@style/mega_text"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Transportation"/>
+            android:text="64.75"/>
     </LinearLayout>
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            style="@style/mega_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Gas"/>
+        <View
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
+        <TextView
+            style="@style/mega_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="$243.88"/>
+    </LinearLayout>
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            style="@style/mega_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Misc"/>
+        <View
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
+        <TextView
+            style="@style/mega_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="$24.37"/>
+    </LinearLayout>
+
 </LinearLayout>
