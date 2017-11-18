@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.example.mikezurawski.onyourmark.views.ViewBudgetActivity">
+    tools:context="com.example.mikezurawski.onyourmark.views.MonthlyActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -14,6 +14,7 @@
         android:orientation="horizontal">
 
         <Button
+            android:id="@+id/back_month_btn"
             style="@style/title_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -27,6 +28,7 @@
             android:text="Dec"/>
 
         <Button
+            android:id="@+id/forward_month_btn"
             style="@style/title_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

@@ -22,7 +22,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".views.ViewBudgetActivity" />
+        <activity android:name=".views.MonthlyActivity" />
         <activity android:name=".views.BreakdownActivity"></activity>
     </application>
 

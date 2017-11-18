@@ -1,8 +1,11 @@
 package com.example.mikezurawski.onyourmark.views;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 
 import com.example.mikezurawski.onyourmark.R;
 import com.github.mikephil.charting.charts.PieChart;
@@ -15,12 +18,34 @@ import com.github.mikephil.charting.data.PieEntry;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ViewBudgetActivity extends AppCompatActivity {
+public class MonthlyActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_view_budget);
+        setContentView(R.layout.activity_monthly);
+
+
+
+
+        Button backMonthButton = (Button) findViewById(R.id.back_month_btn);
+        backMonthButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // go back a month for DB data
+            }
+        });
+        Button forwardMonthButton = (Button) findViewById(R.id.forward_month_btn);
+        forwardMonthButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // go forward a month for DB data
+            }
+        });
+
+
+
+
 
         PieChart pieChart = (PieChart) findViewById(R.id.chart);
 

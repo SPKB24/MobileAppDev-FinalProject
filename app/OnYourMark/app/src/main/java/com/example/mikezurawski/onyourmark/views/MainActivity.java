@@ -10,7 +10,6 @@ import android.widget.TextView;
 import com.example.mikezurawski.onyourmark.R;
 
 import com.example.mikezurawski.onyourmark.database.BudgetItem;
-import com.example.mikezurawski.onyourmark.database.CostItem;
 import com.example.mikezurawski.onyourmark.database.DatabaseHandler;
 
 public class MainActivity extends AppCompatActivity {
@@ -26,12 +25,6 @@ public class MainActivity extends AppCompatActivity {
         // ?
         database = new DatabaseHandler(this);
         BudgetItem budgetItem = new BudgetItem();
-        budgetItem.setDate("today");
-        budgetItem.setLocation("Chipotle");
-        CostItem costItem = new CostItem();
-        costItem.setTitle("Chicken Burrito");
-        costItem.setCost(2.00);
-        budgetItem.addItem(costItem);
 
         database.addBudgetItem(budgetItem);
 
@@ -47,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
         viewLeftoversBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, ViewBudgetActivity.class);
+                Intent intent = new Intent(MainActivity.this, MonthlyActivity.class);
                 startActivity(intent);
             }
         });
