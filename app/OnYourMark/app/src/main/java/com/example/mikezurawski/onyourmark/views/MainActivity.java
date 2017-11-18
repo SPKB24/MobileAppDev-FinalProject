@@ -9,9 +9,9 @@ import android.widget.TextView;
 
 import com.example.mikezurawski.onyourmark.R;
 
-import database.BudgetItem;
-import database.CostItem;
-import database.DatabaseHandler;
+import com.example.mikezurawski.onyourmark.database.BudgetItem;
+import com.example.mikezurawski.onyourmark.database.CostItem;
+import com.example.mikezurawski.onyourmark.database.DatabaseHandler;
 
 public class MainActivity extends AppCompatActivity {
 

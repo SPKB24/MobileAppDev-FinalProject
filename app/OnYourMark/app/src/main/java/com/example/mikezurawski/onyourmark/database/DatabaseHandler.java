@@ -1,4 +1,4 @@
-package database;
+package com.example.mikezurawski.onyourmark.database;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -62,7 +62,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         //values.put(KEY_ITEMS, budgetItem.getItems()); // TODO: Figure this out
 
         db.insert(TABLE_BUDGETS, null, values);
-        db.close(); // Closing database connection
+        db.close(); // Closing com.example.mikezurawski.onyourmark.database connection
     }
 
     public BudgetItem getBudgetItem(int id) {

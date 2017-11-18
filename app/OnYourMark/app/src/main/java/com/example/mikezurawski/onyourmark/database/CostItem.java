@@ -1,4 +1,4 @@
-package database;
+package com.example.mikezurawski.onyourmark.database;
 
 import java.io.Serializable;
 
