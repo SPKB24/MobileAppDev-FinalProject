@@ -37,8 +37,6 @@
         </activity>
         <activity android:name=".views.MonthlyActivity" />
         <activity android:name=".views.BreakdownActivity"></activity>
-        <activity android:name=".views.ViewBudgetActivity" />
-        <activity android:name=".views.BreakdownActivity" />
         <activity android:name=".views.AddItemActivity"></activity>
         <activity android:name=".views.SelectImageActivity"></activity>
     </application>
