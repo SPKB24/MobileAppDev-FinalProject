@@ -12,6 +12,8 @@ import com.example.mikezurawski.onyourmark.R;
 import com.example.mikezurawski.onyourmark.database.BudgetItem;
 import com.example.mikezurawski.onyourmark.database.DatabaseHandler;
 
+import java.util.Date;
+
 public class MainActivity extends AppCompatActivity {
 
     DatabaseHandler database = null;
@@ -24,7 +26,11 @@ public class MainActivity extends AppCompatActivity {
 
         // ?
         database = new DatabaseHandler(this);
+
         BudgetItem budgetItem = new BudgetItem();
+        budgetItem.setCategory("Test");
+        budgetItem.setCost(500);
+        budgetItem.setDate(new Date());
 
         database.addBudgetItem(budgetItem);
 
@@ -55,16 +61,17 @@ public class MainActivity extends AppCompatActivity {
         });
 
         textView = (TextView) findViewById(R.id.app_title);
-
     }
 
     private void displayAllData() {
         String toPrint = "";
-        for (BudgetItem item : database.getAllContacts()) {
-            toPrint += item.getLocation() + "\n"
-                    + item.getDate() + "\n"
-                    + item.getID() + "\n\n";
+        for (BudgetItem item : database.getBudgetItems()) {
+            toPrint += " | id: " + item.getId()
+                    + " | category: " + item.getCategory()
+                    + " | date: " + item.getDate()
+                    + " | cost: " + item.getCost()
+                    + " |\n";
         }
-        textView.setText(toPrint);
+        System.out.println(toPrint);
     }
 }

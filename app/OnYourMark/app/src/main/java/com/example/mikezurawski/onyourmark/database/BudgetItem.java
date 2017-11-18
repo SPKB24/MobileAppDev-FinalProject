@@ -1,21 +1,30 @@
 package com.example.mikezurawski.onyourmark.database;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Date;
 
 public class BudgetItem implements Serializable {
 
+    private String id = "";
     private String category = "";
-    private Date _date;
+    private Date date;
     private float cost;
 
     public BudgetItem() {}
 
-    public BudgetItem(String category, Date _date, float cost) {
+    public BudgetItem(String id, String category, Date date, float cost) {
+        this.id = id;
         this.category = category;
-        this._date = _date;
+        this.date = date;
         this.cost = cost;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getCategory() {
@@ -26,12 +35,12 @@ public class BudgetItem implements Serializable {
         this.category = category;
     }
 
-    public Date get_date() {
-        return _date;
+    public Date getDate() {
+        return date;
     }
 
-    public void set_date(Date _date) {
-        this._date = _date;
+    public void setDate(Date date) {
+        this.date = date;
     }
 
     public float getCost() {
