@@ -14,6 +14,12 @@ import com.example.mikezurawski.onyourmark.database.DatabaseHandler;
 
 import java.util.Date;
 
+// Keys
+
+// Key 1 - 22126be1efca48c6bf1f8fc6fe085bc6
+// Key 2 - b96d2cf4bc714de9b268660c3d8854b0
+// Endpoint - https://westcentralus.api.cognitive.microsoft.com/vision/v1.0
+
 public class MainActivity extends AppCompatActivity {
 
     DatabaseHandler database = null;
@@ -56,6 +62,15 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this, BreakdownActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        Button viewAddItemBtn = (Button) findViewById(R.id.add_budget_item_btn);
+        viewAddItemBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, AddItemActivity.class);
                 startActivity(intent);
             }
         });

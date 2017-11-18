@@ -29,6 +29,10 @@ dependencies {
     implementation 'com.android.support.constraint:constraint-layout:1.0.2'
     testImplementation 'junit:junit:4.12'
 
+    implementation 'com.irozon.sneaker:sneaker:1.0.1'
+    implementation 'com.mindorks:paracamera:0.2.2'
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.0.2'
+
     implementation 'com.microsoft.projectoxford:vision:1.0.393'
     implementation 'com.irozon.sneaker:sneaker:1.0.1'
     implementation 'com.mindorks:paracamera:0.2.2'
