@@ -109,8 +109,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
                 budgetItem.setId(cursor.getString(0));
                 budgetItem.setDate(createDateObject(
-                        cursor.getInt(1),  // Day
-                        cursor.getInt(2),  // Month
+                        cursor.getInt(1),   // Day
+                        cursor.getInt(2),   // Month
                         cursor.getInt(3))); // Year
                 budgetItem.setCategory(cursor.getString(4));
                 budgetItem.setCost(Float.parseFloat(cursor.getString(5)));
@@ -153,28 +153,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         return items;
     }
 
-    // TODO: Probably delete?
-//    public List<BudgetItem> getAllContacts() {
-//        List<BudgetItem> itemsList = new ArrayList<>();
-//
-//        String selectQuery = "SELECT * FROM " + TABLE_BUDGETS;
-//
-//        SQLiteDatabase db = this.getWritableDatabase();
-//        Cursor cursor = db.rawQuery(selectQuery, null);
-//
-//        if (cursor.moveToFirst()) {
-//            do {
-//                BudgetItem budgetItem = new BudgetItem();
-//                budgetItem.setLocation(cursor.getString(1));
-//                budgetItem.setDate(cursor.getString(2));
-//
-//                itemsList.add(budgetItem);
-//            } while (cursor.moveToNext());
-//        }
-//
-//        return itemsList;
-//    }
-
     public int getBudgetItemCount() {
         String countQuery = "SELECT  * FROM " + TABLE_BUDGETS;
         SQLiteDatabase db = this.getReadableDatabase();
@@ -193,12 +171,4 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
         return cursor.getCount();
     }
-
-//    public void deleteBudgetItem(BudgetItem budgetItem) {
-//        SQLiteDatabase db = this.getWritableDatabase();
-//        db.delete(TABLE_BUDGETS, KEY_ID + " = ?",
-//                new String[] { String.valueOf(budgetItem.getID()) });
-//        db.close();
-//    }
-
 }
