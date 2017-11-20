@@ -8,7 +8,7 @@ public class BudgetItem implements Serializable {
     private String id = "";
     private String category = "";
     private Date date;
-    private float cost;
+    private double cost;
 
     public BudgetItem() {}
 
@@ -43,11 +43,11 @@ public class BudgetItem implements Serializable {
         this.date = date;
     }
 
-    public float getCost() {
+    public double getCost() {
         return cost;
     }
 
-    public void setCost(float cost) {
+    public void setCost(double cost) {
         this.cost = cost;
     }
 

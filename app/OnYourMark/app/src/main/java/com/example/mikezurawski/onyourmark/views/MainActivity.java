@@ -12,7 +12,11 @@ import com.example.mikezurawski.onyourmark.R;
 import com.example.mikezurawski.onyourmark.database.BudgetItem;
 import com.example.mikezurawski.onyourmark.database.DatabaseHandler;
 
+import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.Random;
 
 // Keys
 
@@ -32,14 +36,30 @@ public class MainActivity extends AppCompatActivity {
 
         // ?
         database = new DatabaseHandler(this);
+        database.resetDB();
+        final Random rand = new Random();
+        Thread thread = new Thread(new Runnable() {
 
-        BudgetItem budgetItem = new BudgetItem();
-        budgetItem.setCategory("Test");
-        budgetItem.setCost(500);
-        budgetItem.setDate(new Date());
-
-        database.addBudgetItem(budgetItem);
-
+            @Override
+            public void run() {
+                try  {
+                    for (int i = 0; i < 50; i++) {
+                        BudgetItem budgetItem = new BudgetItem();
+                        final double cost = round(rand.nextDouble() * (999.50 - 1.50) + 1.50, 2);
+                        budgetItem.setCategory("Category-" + i);
+                        budgetItem.setCost(cost);
+                        Calendar cal = Calendar.getInstance();
+                        cal.set(2017, 2, 20);
+                        budgetItem.setDate(cal.getTime());
+                        database.addBudgetItem(budgetItem);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        thread.start();
+        
         Button viewBudgetsBtn = (Button) findViewById(R.id.view_budget_btn);
         viewBudgetsBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -88,5 +108,14 @@ public class MainActivity extends AppCompatActivity {
                     + " |\n";
         }
         System.out.println(toPrint);
+    }
+
+    public static double round(double value, int places) {
+        if (places < 0) throw new IllegalArgumentException();
+
+        long factor = (long) Math.pow(10, places);
+        value = value * factor;
+        long tmp = Math.round(value);
+        return (double) tmp / factor;
     }
 }

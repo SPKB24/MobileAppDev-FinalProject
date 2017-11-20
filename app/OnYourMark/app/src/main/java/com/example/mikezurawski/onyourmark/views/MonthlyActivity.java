@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.Button;
 
 import com.example.mikezurawski.onyourmark.R;
+import com.example.mikezurawski.onyourmark.database.DatabaseHandler;
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.components.Description;
 import com.github.mikephil.charting.components.Legend;
@@ -20,19 +21,21 @@ import java.util.List;
 
 public class MonthlyActivity extends AppCompatActivity {
 
+    DatabaseHandler database = null;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_monthly);
 
-
+        database = new DatabaseHandler(this);
 
 
         Button backMonthButton = (Button) findViewById(R.id.back_month_btn);
         backMonthButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // go back a month for DB data
+                // go back a month
             }
         });
         Button forwardMonthButton = (Button) findViewById(R.id.forward_month_btn);

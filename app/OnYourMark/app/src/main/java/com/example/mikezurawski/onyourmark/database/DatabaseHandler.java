@@ -32,6 +32,9 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     private static final String KEY_AMOUNT_SPENT = "amount_spent";
     private static final String KEY_SPENDING_LIMIT = "spending_limit";
 
+    // ticker system for unique IDs
+    private static int idTicker = 0;
+
     public DatabaseHandler(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
@@ -39,14 +42,20 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         String CREATE_CONTACTS_TABLE = "CREATE TABLE " + TABLE_BUDGETS + "("
-                + KEY_ID + " TEXT PRIMARY KEY,"
+                + KEY_ID + " INTEGER PRIMARY KEY,"
                 + KEY_DAY + " INTEGER,"
                 + KEY_MONTH + " INTEGER,"
                 + KEY_YEAR + " INTEGER,"
                 + KEY_CATEGORY + " TEXT,"
-                + KEY_AMOUNT_SPENT + " TEXT,"
-                + KEY_SPENDING_LIMIT + " TEXT" + ")";
+                + KEY_AMOUNT_SPENT + " DOUBLE,"
+                + KEY_SPENDING_LIMIT + " DOUBLE" + ")";
         db.execSQL(CREATE_CONTACTS_TABLE);
+    }
+
+    public void resetDB() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_BUDGETS);
+        onCreate(db);
     }
 
     @Override
@@ -62,7 +71,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        values.put(KEY_ID, getCurrentTimeForId());
+        values.put(KEY_ID, idTicker++);
         values.put(KEY_DAY, getFromDate(budgetItem.getDate(), Calendar.DAY_OF_WEEK));
         values.put(KEY_MONTH, getFromDate(budgetItem.getDate(), Calendar.MONTH));
         values.put(KEY_YEAR, getFromDate(budgetItem.getDate(), Calendar.YEAR));
@@ -72,10 +81,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
         db.insert(TABLE_BUDGETS, null, values);
         db.close();
-    }
-
-    private String getCurrentTimeForId() {
-        return new Date().toString();
     }
 
     private Integer getFromDate(final Date date, final int type) {
@@ -179,8 +184,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         String countQuery = "SELECT  * FROM " + TABLE_BUDGETS;
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(countQuery, null);
-        cursor.close();
-
         return cursor.getCount();
     }
 
@@ -189,7 +192,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 + "WHERE " + KEY_MONTH + " = '" + month + "'";
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(countQuery, null);
-        cursor.close();
 
         return cursor.getCount();
     }
