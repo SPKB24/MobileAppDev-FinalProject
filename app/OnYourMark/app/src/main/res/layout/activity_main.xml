@@ -5,50 +5,54 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_centerHorizontal="true"
-    android:padding="@dimen/min_padding"
     android:orientation="vertical"
     tools:context="com.example.mikezurawski.onyourmark.views.MainActivity">
 
-    <ImageView
-        android:id="@+id/logo"
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:layout_marginTop="30dp"
-        android:contentDescription="@string/logo_description"
-        android:src="@mipmap/ic_launcher"/>
-
-    <TextView
-        android:id="@+id/app_title"
-        style="@style/title_text"
-        android:gravity="center_horizontal"
+    <android.support.v7.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/logo"
-        android:text="@string/app_title" />
+        android:minHeight="?android:attr/actionBarSize"
+        android:background="?android:attr/colorPrimary"
+        app:titleTextColor="@color/colorWhite">
+        <TextView
+            android:textColor="@color/colorWhite"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="On Your Mark"/>
+    </android.support.v7.widget.Toolbar>
 
-    <TextView
-        android:id="@+id/app_tagline"
-        style="@style/mini_text"
-        android:gravity="center_horizontal"
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Because accounting should never be hard" />
+        android:layout_height="match_parent"
+        android:padding="5dp">
 
-    <Button style="@style/button_style"
-        android:id="@+id/view_budget_btn"
-        android:text="@string/view_budget"/>
-    
-    <Button style="@style/button_style"
-        android:id="@+id/add_budget_item_btn"
-        android:text="@string/add_budget_item"/>
+        <TextView
+            android:id="@+id/app_tagline"
+            style="@style/mini_text"
+            android:gravity="center_horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Because accounting should never be hard" />
 
-    <Button style="@style/button_style"
-        android:id="@+id/view_leftovers_btn"
-        android:text="@string/view_leftovers"/>
+        <Button style="@style/button_style"
+            android:id="@+id/view_budget_btn"
+            android:text="@string/view_budget"/>
 
-    <Button style="@style/button_style"
-        android:id="@+id/view_breakdown_btn"
-        android:text="@string/view_breakdown"/>
+        <Button style="@style/button_style"
+            android:id="@+id/add_budget_item_btn"
+            android:text="@string/add_budget_item"/>
+
+        <Button style="@style/button_style"
+            android:id="@+id/view_leftovers_btn"
+            android:text="@string/view_leftovers"/>
+
+        <Button style="@style/button_style"
+            android:id="@+id/view_breakdown_btn"
+            android:text="@string/view_breakdown"/>
+
+    </LinearLayout>
 
 
 </LinearLayout>
