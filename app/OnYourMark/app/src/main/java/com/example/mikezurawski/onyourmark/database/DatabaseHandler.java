@@ -118,7 +118,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                         cursor.getInt(2),  // Month
                         cursor.getInt(3))); // Year
                 budgetItem.setCategory(cursor.getString(4));
-                budgetItem.setCost(Float.parseFloat(cursor.getString(5)));
+                budgetItem.setCost(cursor.getDouble(5));
 
                 items.add(budgetItem);
             } while (cursor.moveToNext());
