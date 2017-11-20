@@ -18,6 +18,7 @@ import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -36,9 +37,13 @@ public class MonthlyActivity extends AppCompatActivity {
         Calendar cal = Calendar.getInstance();
         cal.setTime(new Date());
         monthlyItems = database.getBudgetItems(cal.get(Calendar.MONTH));
-        for (BudgetItem e : monthlyItems) {
-            System.out.println(e.getId());
+        System.out.println("*** START ***");
+        for (BudgetItem budgetItem : monthlyItems) {
+            System.out.println("id: " + budgetItem.getId());
+            System.out.println("cate: " + budgetItem.getCategory());
+            System.out.println("cost" + budgetItem.getCost());
         }
+        System.out.println("*** END ***");
 
         Button backMonthButton = (Button) findViewById(R.id.back_month_btn);
         backMonthButton.setOnClickListener(new View.OnClickListener() {
@@ -58,23 +63,35 @@ public class MonthlyActivity extends AppCompatActivity {
             }
         });
 
-        refreshGraph(monthlyItems);
+        //refreshGraph();
 
     }
 
-    private void refreshGraph(ArrayList<BudgetItem> list) {
+    private void refreshGraph() {
+        double[] spentPerCategory = new double[6];
+        double totalSpent = 0;
         PieChart pieChart = (PieChart) findViewById(R.id.chart);
 
+        Arrays.fill(spentPerCategory, 0);
         for (BudgetItem budgetItem : monthlyItems) {
-
+            System.out.println("id: " + budgetItem.getId());
+            System.out.println("cate: " + budgetItem.getCategory());
+            System.out.println("cost" + budgetItem.getCost());
+            //spentPerCategory[budgetItem.getCategory()] += budgetItem.getCost();
+            totalSpent += budgetItem.getCost();
         }
+        return;
 
+        /*
         List<PieEntry> entries = new ArrayList<>();
 
-        entries.add(new PieEntry(60.5f, ""));
-        entries.add(new PieEntry(39.5f, ""));
+        for (double spentC : spentPerCategory) {
+            double rawPercentage = spentC / totalSpent;
+            float percentage = (float) rawPercentage;
+            entries.add(new PieEntry(percentage, ""));
+        }
 
-        final int[] MY_COLORS = {Color.BLUE, Color.RED};
+        final int[] MY_COLORS = {Color.BLUE, Color.RED, Color.YELLOW, Color.CYAN, Color.GREEN};
         ArrayList<Integer> colors = new ArrayList<Integer>();
 
         for(int c: MY_COLORS) colors.add(c);
@@ -93,5 +110,6 @@ public class MonthlyActivity extends AppCompatActivity {
         pieChart.setData(data);
         pieChart.animateY(500);
         pieChart.invalidate(); // refresh
+        */
     }
 }
