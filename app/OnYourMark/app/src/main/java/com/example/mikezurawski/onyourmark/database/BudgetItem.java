@@ -6,13 +6,13 @@ import java.util.Date;
 public class BudgetItem implements Serializable {
 
     private String id = "";
-    private String category = "";
+    private int category = -1;
     private Date date;
     private double cost;
 
     public BudgetItem() {}
 
-    public BudgetItem(String id, String category, Date date, float cost) {
+    public BudgetItem(String id, int category, Date date, float cost) {
         this.id = id;
         this.category = category;
         this.date = date;
@@ -27,11 +27,11 @@ public class BudgetItem implements Serializable {
         this.id = id;
     }
 
-    public String getCategory() {
+    public int getCategory() {
         return category;
     }
 
-    public void setCategory(String category) {
+    public void setCategory(int category) {
         this.category = category;
     }
 

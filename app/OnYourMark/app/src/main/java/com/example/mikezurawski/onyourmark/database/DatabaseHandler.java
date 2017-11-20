@@ -15,7 +15,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
     // All Static variables
     // Database Version
-    private static final int DATABASE_VERSION = 2;
+    private static final int DATABASE_VERSION = 3;
 
     // Database Name
     private static final String DATABASE_NAME = "budgetTracker";
@@ -46,7 +46,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 + KEY_DAY + " INTEGER,"
                 + KEY_MONTH + " INTEGER,"
                 + KEY_YEAR + " INTEGER,"
-                + KEY_CATEGORY + " TEXT,"
+                + KEY_CATEGORY + " INTEGER,"
                 + KEY_AMOUNT_SPENT + " DOUBLE,"
                 + KEY_SPENDING_LIMIT + " DOUBLE" + ")";
         db.execSQL(CREATE_CONTACTS_TABLE);
@@ -100,6 +100,23 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         return "0"; // TODO: do
     }
 
+    private String getCategoryString(int i) {
+        switch(i) {
+            case 1:
+                return "FOOD";
+            case 2:
+                return "CLOTHES";
+            case 3:
+                return "GAS";
+            case 4:
+                return "UTILITIES";
+            case 0:
+                return "MISC";
+            default:
+                return "";
+        }
+    }
+
     public ArrayList<BudgetItem> getBudgetItems() {
         ArrayList<BudgetItem> items = new ArrayList<>();
 
@@ -117,7 +134,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                         cursor.getInt(1),  // Day
                         cursor.getInt(2),  // Month
                         cursor.getInt(3))); // Year
-                budgetItem.setCategory(cursor.getString(4));
+                budgetItem.setCategory(cursor.getInt(4));
                 budgetItem.setCost(cursor.getDouble(5));
 
                 items.add(budgetItem);

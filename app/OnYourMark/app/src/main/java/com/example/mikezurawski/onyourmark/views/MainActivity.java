@@ -42,11 +42,10 @@ public class MainActivity extends AppCompatActivity {
         for (int i = 0; i < 50; i++) {
             BudgetItem budgetItem = new BudgetItem();
             final double cost = rand.nextDouble() * (999.50 - 1.50) + 1.50;
-            System.out.println(round(cost, 2));
-            budgetItem.setCategory("Category-" + i);
-            budgetItem.setCost(cost);
+            budgetItem.setCategory(rand.nextInt() % 5);
+            budgetItem.setCost(round(cost, 2));
             Calendar cal = Calendar.getInstance();
-            cal.set(2017, 2, 20);
+            cal.set(2017, 10, 9);
             budgetItem.setDate(cal.getTime());
             database.addBudgetItem(budgetItem);
         }
