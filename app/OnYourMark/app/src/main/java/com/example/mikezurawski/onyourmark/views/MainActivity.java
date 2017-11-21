@@ -209,7 +209,7 @@ public class MainActivity extends AppCompatActivity {
                                 drawer.closeDrawer();
                                 break;
                             case 2:
-                                intent = new Intent(MainActivity.this, SelectImageActivity.class);
+                                intent = new Intent(MainActivity.this, AddItemActivity.class);
                                 startActivity(intent);
                                 break;
                             case 3:
