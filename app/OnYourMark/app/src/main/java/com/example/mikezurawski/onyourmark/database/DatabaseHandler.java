@@ -15,7 +15,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
     // All Static variables
     // Database Version
-    private static final int DATABASE_VERSION = 2;
+    private static final int DATABASE_VERSION = 3;
 
     // Database Name
     private static final String DATABASE_NAME = "budgetTracker";
@@ -32,6 +32,9 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     private static final String KEY_AMOUNT_SPENT = "amount_spent";
     private static final String KEY_SPENDING_LIMIT = "spending_limit";
 
+    // ticker system for unique IDs
+    private static int idTicker = 0;
+
     public DatabaseHandler(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
@@ -39,14 +42,20 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         String CREATE_CONTACTS_TABLE = "CREATE TABLE " + TABLE_BUDGETS + "("
-                + KEY_ID + " TEXT PRIMARY KEY,"
+                + KEY_ID + " INTEGER PRIMARY KEY,"
                 + KEY_DAY + " INTEGER,"
                 + KEY_MONTH + " INTEGER,"
                 + KEY_YEAR + " INTEGER,"
-                + KEY_CATEGORY + " TEXT,"
-                + KEY_AMOUNT_SPENT + " TEXT,"
-                + KEY_SPENDING_LIMIT + " TEXT" + ")";
+                + KEY_CATEGORY + " INTEGER,"
+                + KEY_AMOUNT_SPENT + " DOUBLE,"
+                + KEY_SPENDING_LIMIT + " DOUBLE" + ")";
         db.execSQL(CREATE_CONTACTS_TABLE);
+    }
+
+    public void resetDB() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_BUDGETS);
+        onCreate(db);
     }
 
     @Override
@@ -62,7 +71,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        values.put(KEY_ID, getCurrentTimeForId());
+        values.put(KEY_ID, idTicker++);
         values.put(KEY_DAY, getFromDate(budgetItem.getDate(), Calendar.DAY_OF_WEEK));
         values.put(KEY_MONTH, getFromDate(budgetItem.getDate(), Calendar.MONTH));
         values.put(KEY_YEAR, getFromDate(budgetItem.getDate(), Calendar.YEAR));
@@ -72,10 +81,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
         db.insert(TABLE_BUDGETS, null, values);
         db.close();
-    }
-
-    private String getCurrentTimeForId() {
-        return new Date().toString();
     }
 
     private Integer getFromDate(final Date date, final int type) {
@@ -95,6 +100,23 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         return "0"; // TODO: do
     }
 
+    private String getCategoryString(int i) {
+        switch(i) {
+            case 1:
+                return "FOOD";
+            case 2:
+                return "CLOTHES";
+            case 3:
+                return "GAS";
+            case 4:
+                return "UTILITIES";
+            case 0:
+                return "MISC";
+            default:
+                return "";
+        }
+    }
+
     public ArrayList<BudgetItem> getBudgetItems() {
         ArrayList<BudgetItem> items = new ArrayList<>();
 
@@ -112,8 +134,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                         cursor.getInt(1),   // Day
                         cursor.getInt(2),   // Month
                         cursor.getInt(3))); // Year
-                budgetItem.setCategory(cursor.getString(4));
-                budgetItem.setCost(Float.parseFloat(cursor.getString(5)));
+                budgetItem.setCategory(cursor.getInt(4));
+                budgetItem.setCost(cursor.getDouble(5));
 
                 items.add(budgetItem);
             } while (cursor.moveToNext());
@@ -135,16 +157,13 @@ public class DatabaseHandler extends SQLiteOpenHelper {
             do {
                 BudgetItem budgetItem = new BudgetItem();
 
-                System.out.println("****************************");
-                System.out.println(cursor.getString(0));
-                System.out.println(cursor.getString(1));
-                System.out.println(cursor.getString(2));
-                System.out.println(cursor.getString(3));
-                System.out.println(cursor.getString(4));
-                System.out.println("****************************");
-
-//                budgetItem.setCategory(cursor.getString(1));
-//                budgetItem.setDate(cursor.getString(2));
+                budgetItem.setId(cursor.getString(0));
+                budgetItem.setDate(createDateObject(
+                        cursor.getInt(1),  // Day
+                        cursor.getInt(2),  // Month
+                        cursor.getInt(3))); // Year
+                budgetItem.setCategory(cursor.getInt(4));
+                budgetItem.setCost(cursor.getDouble(5));
 
                 items.add(budgetItem);
             } while (cursor.moveToNext());
@@ -157,8 +176,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         String countQuery = "SELECT  * FROM " + TABLE_BUDGETS;
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(countQuery, null);
-        cursor.close();
-
         return cursor.getCount();
     }
 
@@ -167,7 +184,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 + "WHERE " + KEY_MONTH + " = '" + month + "'";
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(countQuery, null);
-        cursor.close();
 
         return cursor.getCount();
     }

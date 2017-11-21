@@ -35,6 +35,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.text.DecimalFormat;
+import java.util.Random;
 
 // Keys
 
@@ -60,13 +62,21 @@ public class MainActivity extends AppCompatActivity {
 
         // ?
         database = new DatabaseHandler(this);
+        database.resetDB();
+        final Random rand = new Random();
 
-        BudgetItem budgetItem = new BudgetItem();
-        budgetItem.setCategory("Test");
-        budgetItem.setCost(500);
-        budgetItem.setDate(new Date());
+        for (int i = 0; i < 50; i++) {
+            BudgetItem budgetItem = new BudgetItem();
+            final double cost = rand.nextDouble() * (999.50 - 1.50) + 1.50;
+            budgetItem.setCategory(rand.nextInt(5));
+            budgetItem.setCost(round(cost, 2));
+            Calendar cal = Calendar.getInstance();
+            cal.set(2017, rand.nextInt(12), 9);
+            budgetItem.setDate(cal.getTime());
+            database.addBudgetItem(budgetItem);
+        }
 
-        database.addBudgetItem(budgetItem);
+        displayAllData();
 
         displayAllData();
     }
@@ -216,5 +226,14 @@ public class MainActivity extends AppCompatActivity {
                         return false;
                     }
                 }).build();
+    }
+
+    public static double round(double value, int places) {
+        if (places < 0) throw new IllegalArgumentException();
+
+        long factor = (long) Math.pow(10, places);
+        value = value * factor;
+        long tmp = Math.round(value);
+        return (double) tmp / factor;
     }
 }

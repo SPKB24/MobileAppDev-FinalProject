@@ -22,10 +22,11 @@
             android:text="&lt;"/>
 
         <TextView
+            android:id="@+id/month_text"
             style="@style/title_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Dec"/>
+            android:text="NOV"/>
 
         <Button
             android:id="@+id/forward_month_btn"
