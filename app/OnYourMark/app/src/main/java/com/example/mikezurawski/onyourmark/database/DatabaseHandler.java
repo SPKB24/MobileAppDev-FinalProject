@@ -157,16 +157,13 @@ public class DatabaseHandler extends SQLiteOpenHelper {
             do {
                 BudgetItem budgetItem = new BudgetItem();
 
-                System.out.println("****************************");
-                System.out.println(cursor.getString(0));
-                System.out.println(cursor.getString(1));
-                System.out.println(cursor.getString(2));
-                System.out.println(cursor.getString(3));
-                System.out.println(cursor.getString(4));
-                System.out.println("****************************");
-
-//                budgetItem.setCategory(cursor.getString(1));
-//                budgetItem.setDate(cursor.getString(2));
+                budgetItem.setId(cursor.getString(0));
+                budgetItem.setDate(createDateObject(
+                        cursor.getInt(1),  // Day
+                        cursor.getInt(2),  // Month
+                        cursor.getInt(3))); // Year
+                budgetItem.setCategory(cursor.getInt(4));
+                budgetItem.setCost(cursor.getDouble(5));
 
                 items.add(budgetItem);
             } while (cursor.moveToNext());
