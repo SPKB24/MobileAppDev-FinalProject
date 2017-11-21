@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.example.mikezurawski.onyourmark.R;
 import com.example.mikezurawski.onyourmark.database.BudgetItem;
@@ -27,6 +28,7 @@ public class MonthlyActivity extends AppCompatActivity {
 
     DatabaseHandler database = null;
     ArrayList<BudgetItem> monthlyItems = null;
+    int currentMonth = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,9 +36,72 @@ public class MonthlyActivity extends AppCompatActivity {
         setContentView(R.layout.activity_monthly);
 
         database = new DatabaseHandler(this);
+
         Calendar cal = Calendar.getInstance();
         cal.setTime(new Date());
-        monthlyItems = database.getBudgetItems(cal.get(Calendar.MONTH));
+        currentMonth = cal.get(Calendar.MONTH);
+        refreshGraph();
+
+        Button backMonthButton = (Button) findViewById(R.id.back_month_btn);
+        backMonthButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (currentMonth-- == 0) {
+                    currentMonth = 11;
+                }
+                updateMonthText();
+                refreshGraph();
+            }
+        });
+        Button forwardMonthButton = (Button) findViewById(R.id.forward_month_btn);
+        forwardMonthButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                currentMonth  = (currentMonth + 1) % 12;
+                updateMonthText();
+                refreshGraph();
+            }
+        });
+    }
+
+    private void updateMonthText() {
+        TextView monthText = (TextView) findViewById(R.id.month_text);
+        monthText.setText(getMonthString(currentMonth));
+    }
+
+    private String getMonthString(int month) {
+        switch (currentMonth) {
+            case 0:
+                return "JAN";
+            case 1:
+                return "FEB";
+            case 2:
+                return "MAR";
+            case 3:
+                return "APR";
+            case 4:
+                return "MAY";
+            case 5:
+                return "JUN";
+            case 6:
+                return "JUL";
+            case 7:
+                return "AUG";
+            case 8:
+                return "SEP";
+            case 9:
+                return "OCT";
+            case 10:
+                return "NOV";
+            case 11:
+                return "DEC";
+            default:
+                return "ERR";
+        }
+    }
+
+    private void refreshGraph() {
+        monthlyItems = database.getBudgetItems(currentMonth);
         System.out.println("*** START ***");
         for (BudgetItem budgetItem : monthlyItems) {
             System.out.println("id: " + budgetItem.getId());
@@ -45,44 +110,16 @@ public class MonthlyActivity extends AppCompatActivity {
         }
         System.out.println("*** END ***");
 
-        Button backMonthButton = (Button) findViewById(R.id.back_month_btn);
-        backMonthButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                ArrayList<BudgetItem> list = database.getBudgetItems();
-                for (BudgetItem i : list) {
-                    System.out.println(i.getCost());
-                }
-            }
-        });
-        Button forwardMonthButton = (Button) findViewById(R.id.forward_month_btn);
-        forwardMonthButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // go forward a month for DB data
-            }
-        });
-
-        //refreshGraph();
-
-    }
-
-    private void refreshGraph() {
         double[] spentPerCategory = new double[6];
         double totalSpent = 0;
         PieChart pieChart = (PieChart) findViewById(R.id.chart);
 
         Arrays.fill(spentPerCategory, 0);
         for (BudgetItem budgetItem : monthlyItems) {
-            System.out.println("id: " + budgetItem.getId());
-            System.out.println("cate: " + budgetItem.getCategory());
-            System.out.println("cost" + budgetItem.getCost());
-            //spentPerCategory[budgetItem.getCategory()] += budgetItem.getCost();
+            spentPerCategory[budgetItem.getCategory()] += budgetItem.getCost();
             totalSpent += budgetItem.getCost();
         }
-        return;
 
-        /*
         List<PieEntry> entries = new ArrayList<>();
 
         for (double spentC : spentPerCategory) {
@@ -91,7 +128,7 @@ public class MonthlyActivity extends AppCompatActivity {
             entries.add(new PieEntry(percentage, ""));
         }
 
-        final int[] MY_COLORS = {Color.BLUE, Color.RED, Color.YELLOW, Color.CYAN, Color.GREEN};
+        final int[] MY_COLORS = {Color.BLUE, Color.RED, Color.GRAY, Color.CYAN, Color.GREEN};
         ArrayList<Integer> colors = new ArrayList<Integer>();
 
         for(int c: MY_COLORS) colors.add(c);
@@ -110,6 +147,5 @@ public class MonthlyActivity extends AppCompatActivity {
         pieChart.setData(data);
         pieChart.animateY(500);
         pieChart.invalidate(); // refresh
-        */
     }
 }
