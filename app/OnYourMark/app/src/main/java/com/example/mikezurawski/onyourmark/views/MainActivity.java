@@ -9,6 +9,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.mikezurawski.onyourmark.R;
@@ -31,6 +32,7 @@ import com.mikepenz.materialdrawer.model.ProfileDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -42,6 +44,8 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
+    final String[] MONTHS = { "JANUARY", "FEBRUARY", "MARCH", "APRIL", "MAY", "JUNE", "JULY", "AUGUST", "SEPTEMBER", "OCTOBER", "NOVEMBER", "DECEMBER" };
+
     Drawer drawer = null;
     DatabaseHandler database = null;
 
@@ -51,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         initHamburgerMenu(this);
+        initMonthSwitcher();
         initMonthlySummary();
 
         // ?
@@ -77,6 +82,22 @@ public class MainActivity extends AppCompatActivity {
                     + " |\n";
         }
         System.out.println(toPrint);
+    }
+
+    /**
+     * Initial the month switcher and return the current month index
+     * @return
+     */
+    private int initMonthSwitcher() {
+
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(new Date());
+        int currMonth = cal.get(Calendar.MONTH);
+
+        TextView monthText = (TextView) findViewById(R.id.month_switcher_text);
+        monthText.setText(MONTHS[currMonth]);
+
+        return currMonth;
     }
 
     private void initMonthlySummary() {
