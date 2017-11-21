@@ -16,66 +16,149 @@
         android:background="?android:attr/colorPrimary"
         app:titleTextColor="@color/colorWhite" />
 
+    <!-- Month Switcher -->
     <LinearLayout
+        android:id="@+id/month_switcher"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:layout_height="50dp">
+
+        <Button
+            android:textSize="30sp"
+            android:layout_marginLeft="-20dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:text="&lt;"/>
+
+        <TextView
+            android:textSize="20sp"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:textAlignment="center"
+            android:textColor="@color/md_black_1000"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:text="December"
+            android:textAllCaps="true"/>
+
+        <Button
+            android:textSize="30sp"
+            android:layout_marginRight="-20dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:text="&gt;"/>
+    </LinearLayout>
+
+    <!-- Data Display -->
+    <ScrollView
         android:id="@+id/has_information"
         android:visibility="visible"
-        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <LinearLayout
             android:orientation="vertical"
-            android:background="@drawable/layout_bg"
-            android:layout_margin="7dp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent">
 
-            <TextView
-                android:textColor="@color/colorWhite"
-                android:textStyle="bold"
-                android:paddingTop="2dp"
-                android:paddingStart="10dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Monthly Summary"/>
-
+            <!-- Monthly Summary Box -->
             <LinearLayout
                 android:id="@+id/monthly_summary_box"
-                android:orientation="horizontal"
+                android:orientation="vertical"
+                android:background="@drawable/layout_bg"
+                android:layout_margin="7dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <com.github.mikephil.charting.charts.PieChart
-                    android:id="@+id/chart"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginBottom="10dp"
-                    android:layout_marginRight="10dp"
-                    android:layout_width="150dp"
-                    android:layout_height="100dp" />
+                <TextView
+                    android:textColor="@color/colorWhite"
+                    android:textStyle="bold"
+                    android:paddingTop="2dp"
+                    android:paddingStart="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Monthly Summary"/>
 
                 <LinearLayout
-                    android:orientation="vertical"
+                    android:orientation="horizontal"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center_vertical"
-                    android:gravity="center_vertical">
-                    <TextView
-                        android:textColor="@color/colorWhite"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingBottom="20dp"
-                        android:text="SPENT"/>
-                    <TextView
-                        android:textColor="@color/colorWhite"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="REMAINING"/>
+                    android:layout_height="wrap_content">
+
+                    <com.github.mikephil.charting.charts.PieChart
+                        android:id="@+id/chart"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="10dp"
+                        android:layout_width="150dp"
+                        android:layout_weight="0"
+                        android:layout_height="100dp" />
+
+                    <View
+                        android:layout_width="1dp"
+                        android:layout_marginTop="20dp"
+                        android:layout_height="80dp"
+                        android:layout_marginRight="27dp"
+                        android:background="@color/colorPrimaryDark"/>
+
+                    <LinearLayout
+                        android:orientation="vertical"
+                        android:layout_width="fill_parent"
+                        android:layout_weight="1"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center_vertical"
+                        android:gravity="center_vertical">
+                        <TextView
+                            android:textColor="@color/colorWhite"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingBottom="20dp"
+                            android:text="SPENT"/>
+                        <TextView
+                            android:textColor="@color/colorWhite"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="REMAINING"/>
+                    </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
 
-        </LinearLayout>
-    </LinearLayout>
+            <!-- Monthly Breakdown Box -->
+            <LinearLayout
+                android:orientation="vertical"
+                android:background="@drawable/layout_bg"
+                android:layout_margin="7dp"
+                android:layout_marginTop="0dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
+                <TextView
+                    android:textColor="@color/colorWhite"
+                    android:textStyle="bold"
+                    android:paddingTop="2dp"
+                    android:paddingStart="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Monthly Breakdown"/>
+
+                <!-- Monthly Breakdown Items List -->
+                <LinearLayout
+                    android:id="@+id/monthly_breakdown_items"
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="400dp">
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
+
+    <!-- No Data to Display -->
     <LinearLayout
         android:id="@+id/no_information"
         android:visibility="visible"
