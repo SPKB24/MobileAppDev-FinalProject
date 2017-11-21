@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.example.mikezurawski.onyourmark.views.SettingsActivity">
+
+    <android.support.v7.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/toolbar_settings"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="?android:attr/actionBarSize"
+        android:background="?android:attr/colorPrimary"
+        app:titleTextColor="@color/colorWhite" />
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:padding="16dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <!-- Monthly Limit Box -->
+        <LinearLayout
+            android:background="@drawable/layout_bg"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:gravity="center_horizontal">
+
+            <TextView
+                android:textColor="@color/colorWhite"
+                android:textStyle="bold"
+                android:paddingTop="2dp"
+                android:paddingStart="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Monthly Limit"/>
+
+            <LinearLayout
+                android:id="@+id/viewLimit"
+                android:visibility="visible"
+                android:padding="20dp"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:textColor="@color/colorWhite"
+                    android:id="@+id/monthly_limit_text"
+                    android:text="$5,000,000"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:gravity="center_vertical"/>
+
+                <Button
+                    android:textColor="@color/colorWhite"
+                    android:text="Change"
+                    android:outlineProvider="background"
+                    android:background="@color/colorPrimaryDark"
+                    android:layout_gravity="end"
+                    android:gravity="center"
+                    android:layout_width="80dp"
+                    android:layout_weight="0"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/changeLimit"
+                android:visibility="gone"
+                android:padding="20dp"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:textColor="@color/colorWhite"
+                    android:id="@+id/monthly_limit_input"
+                    android:text="$5,000,000"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:gravity="center_vertical"/>
+
+                <Button
+                    android:textColor="@color/colorWhite"
+                    android:text="Save"
+                    android:outlineProvider="background"
+                    android:background="@color/colorPrimaryDark"
+                    android:layout_gravity="end"
+                    android:gravity="center"
+                    android:layout_width="80dp"
+                    android:layout_weight="0"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- Import/Export Box -->
+        <LinearLayout
+            android:background="@drawable/layout_bg"
+            android:layout_marginTop="10dp"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:gravity="center_horizontal">
+
+            <TextView
+                android:textColor="@color/colorWhite"
+                android:textStyle="bold"
+                android:paddingTop="2dp"
+                android:paddingStart="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Import/Export"/>
+
+            <LinearLayout
+                android:padding="20dp"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <Button
+                    android:layout_marginRight="1dp"
+                    android:textColor="@color/colorWhite"
+                    android:text="Import"
+                    android:outlineProvider="background"
+                    android:background="@color/colorPrimaryDark"
+                    android:layout_gravity="end"
+                    android:gravity="center"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content" />
+
+                <Button
+                    android:layout_marginLeft="1dp"
+                    android:textColor="@color/colorWhite"
+                    android:text="Export"
+                    android:outlineProvider="background"
+                    android:background="@color/colorPrimaryDark"
+                    android:layout_gravity="end"
+                    android:gravity="center"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>
