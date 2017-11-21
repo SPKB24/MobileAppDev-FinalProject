@@ -214,7 +214,7 @@ public class MainActivity extends AppCompatActivity {
                                 break;
                             case 3:
                                 Toast.makeText(activity, "Settings", Toast.LENGTH_SHORT).show();
-                                intent = new Intent(MainActivity.this, BreakdownActivity.class);
+                                intent = new Intent(MainActivity.this, MonthlyActivity.class);
                                 startActivity(intent);
                                 break;
                             case 10:
