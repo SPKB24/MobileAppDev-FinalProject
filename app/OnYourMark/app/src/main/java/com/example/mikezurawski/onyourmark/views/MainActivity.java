@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        new HamburgerMenuHandler(this, R.id.toolbar, "On Your Mark").init();
+        new HamburgerMenuHandler(this, R.id.toolbar, "On Your Mark", 1).init();
         initMonthSwitcher();
         initMonthlySummary();
 

@@ -23,14 +23,17 @@ import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 
 public class HamburgerMenuHandler {
 
+    private Drawer drawer;
     private Activity activity;
     private int toolbar_id;
     private String page_title;
+    private int page_position;
 
-    public HamburgerMenuHandler(final Activity activity, final int toolbar_id, final String page_title) {
+    public HamburgerMenuHandler(final Activity activity, final int toolbar_id, final String page_title, final int page_position) {
         this.activity = activity;
         this.toolbar_id = toolbar_id;
         this.page_title = page_title;
+        this.page_position = page_position;
     }
 
     public void init() {
@@ -58,7 +61,6 @@ public class HamburgerMenuHandler {
         PrimaryDrawerItem item4 = new PrimaryDrawerItem()
                 .withIdentifier(10)
                 .withName("About Us")
-                .withIcon(R.drawable.avd_hide_password_1)
                 .withIconTintingEnabled(true)
                 .withSelectable(false)
                 .withSetSelected(false);
@@ -80,7 +82,7 @@ public class HamburgerMenuHandler {
         Toolbar toolbar = (Toolbar) activity.findViewById(toolbar_id);
         toolbar.setTitle(page_title);
 
-        new DrawerBuilder()
+        drawer = new DrawerBuilder()
                 .withActivity(activity)
                 .withAccountHeader(headerResult)
                 .withCloseOnClick(true)
@@ -96,6 +98,12 @@ public class HamburgerMenuHandler {
                     @Override
                     public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
                         Intent intent;
+
+                        if (position == page_position) {
+                            drawer.closeDrawer();
+                            return false;
+                        }
+
                         switch ((int) drawerItem.getIdentifier()) {
                             case 1:
                                 intent = new Intent(activity, MainActivity.class);
