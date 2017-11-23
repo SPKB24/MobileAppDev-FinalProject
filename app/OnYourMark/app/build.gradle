@@ -33,11 +33,11 @@ dependencies {
     implementation 'com.irozon.sneaker:sneaker:1.0.1'
     implementation 'com.mindorks:paracamera:0.2.2'
     implementation 'com.github.PhilJay:MPAndroidChart:v3.0.2'
+    implementation 'com.afollestad.material-dialogs:core:0.9.5.0'
 
     // Hamburger Menu Requirements
     implementation("com.mikepenz:materialdrawer:6.0.2@aar") { transitive = true }
     implementation "com.android.support:recyclerview-v7:26.1.0"
     implementation "com.android.support:support-annotations:27.0.1"
-    implementation "com.android.support:design:26.1.0"
     implementation "com.mikepenz:fontawesome-typeface:4.7.0.2@aar"
 }

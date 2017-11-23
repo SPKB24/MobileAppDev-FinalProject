@@ -41,17 +41,25 @@
 
             <!-- View Monthly Limit Section -->
             <LinearLayout
-                android:id="@+id/view_monthly_limit_layout"
-                android:visibility="visible"
                 android:padding="20dp"
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
                 <TextView
+                    android:layout_gravity="center_vertical"
+                    android:gravity="center_vertical"
+                    android:layout_marginEnd="5dp"
+                    android:textSize="20dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="$"/>
+
+                <TextView
                     android:id="@+id/monthly_limit_text"
                     android:textColor="@color/colorWhite"
-                    android:text="$5,000,000"
+                    android:text=""
+                    android:textSize="20dp"
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
@@ -62,39 +70,6 @@
                     android:id="@+id/monthly_limit_edit_btn"
                     android:textColor="@color/colorWhite"
                     android:text="Change"
-                    android:outlineProvider="background"
-                    android:background="@color/colorPrimaryDark"
-                    android:layout_gravity="end"
-                    android:gravity="center"
-                    android:layout_width="80dp"
-                    android:layout_weight="0"
-                    android:layout_height="wrap_content" />
-
-            </LinearLayout>
-
-            <!-- Change Monthly Limit Section -->
-            <LinearLayout
-                android:id="@+id/change_monthly_limit_layout"
-                android:visibility="gone"
-                android:padding="20dp"
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <EditText
-                    android:textColor="@color/colorWhite"
-                    android:id="@+id/monthly_limit_input"
-                    android:text="$5,000,000"
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:gravity="center_vertical"/>
-
-                <Button
-                    android:id="@+id/monthly_limit_save_btn"
-                    android:textColor="@color/colorWhite"
-                    android:text="Save"
                     android:outlineProvider="background"
                     android:background="@color/colorPrimaryDark"
                     android:layout_gravity="end"

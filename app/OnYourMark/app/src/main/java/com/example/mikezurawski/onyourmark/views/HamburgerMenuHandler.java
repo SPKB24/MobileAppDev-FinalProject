@@ -21,7 +21,7 @@ import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
  * Created by sohit on 11/21/17.
  */
 
-public class HamburgerMenuHandler {
+class HamburgerMenuHandler {
 
     private Drawer drawer;
     private Activity activity;
@@ -29,41 +29,33 @@ public class HamburgerMenuHandler {
     private String page_title;
     private int page_position;
 
-    public HamburgerMenuHandler(final Activity activity, final int toolbar_id, final String page_title, final int page_position) {
+    HamburgerMenuHandler(final Activity activity, final int toolbar_id, final String page_title, final int page_position) {
         this.activity = activity;
         this.toolbar_id = toolbar_id;
         this.page_title = page_title;
         this.page_position = page_position;
     }
 
-    public void init() {
+    void init() {
         PrimaryDrawerItem item1 = new PrimaryDrawerItem()
                 .withIdentifier(1)
                 .withName("Home")
                 .withIcon(FontAwesome.Icon.faw_home)
-                .withIconTintingEnabled(true)
-                .withSelectable(false)
-                .withSetSelected(false);
+                .withIconTintingEnabled(true);
         PrimaryDrawerItem item2 = new PrimaryDrawerItem()
                 .withIdentifier(2)
                 .withName("Add New Item")
                 .withIcon(FontAwesome.Icon.faw_camera)
-                .withIconTintingEnabled(true)
-                .withSelectable(false)
-                .withSetSelected(false);
+                .withIconTintingEnabled(true);
         PrimaryDrawerItem item3 = new PrimaryDrawerItem()
                 .withIdentifier(3)
                 .withName("Settings")
                 .withIcon(FontAwesome.Icon.faw_sliders)
-                .withIconTintingEnabled(true)
-                .withSelectable(false)
-                .withSetSelected(false);
+                .withIconTintingEnabled(true);
         PrimaryDrawerItem item4 = new PrimaryDrawerItem()
                 .withIdentifier(10)
                 .withName("About Us")
-                .withIconTintingEnabled(true)
-                .withSelectable(false)
-                .withSetSelected(false);
+                .withIconTintingEnabled(true);
 
         // Create the AccountHeader
         AccountHeader headerResult = new AccountHeaderBuilder()
@@ -87,6 +79,7 @@ public class HamburgerMenuHandler {
                 .withAccountHeader(headerResult)
                 .withCloseOnClick(true)
                 .withHeaderPadding(true)
+                .withSelectedItem(page_position)
                 .withToolbar(toolbar)
                 .addDrawerItems(
                         item1,
