@@ -9,8 +9,13 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Environment;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.widget.Toast;
+
+import com.example.mikezurawski.onyourmark.other.Constants;
+import com.example.mikezurawski.onyourmark.views.MainActivity;
+import com.example.mikezurawski.onyourmark.views.SettingsActivity;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -205,21 +210,59 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         return cursor.getCount();
     }
 
-    public static void importDatabase() throws FileNotFoundException {
-        final File file = new File(EXPORTED_DB_FILE_PATH);
+    public static void importDatabase(Activity context) {
 
-        if (!file.exists()) {
-            throw new FileNotFoundException("No Backup file could be found");
+        // Check if user has given READ_EXTERNAL_STORAGE Permission
+        boolean hasPermission = (ContextCompat.checkSelfPermission(context, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED);
+
+        if (!hasPermission) {
+            // Send request for permission. Handler is in SettingsActivity
+            ActivityCompat.requestPermissions(context,
+                    new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+                    Constants.REQUEST_READ_PERMISSION_ID);
+        } else {
+            // Otherwise, go ahead and import
+            try {
+                final File importFile = new File(EXPORTED_DB_FILE_PATH);
+
+                if (!importFile.exists()) {
+                    Toast.makeText(context, "No Backup file could be found", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                FileInputStream importFileStream = new FileInputStream(importFile);
+
+                File currDbFile = new File(CURRENT_DB_FILE_PATH);
+                OutputStream currDbFileStream = new FileOutputStream(currDbFile);
+
+                // Start fresh
+                currDbFile.delete();
+                currDbFile.createNewFile();
+
+                copyFile(importFileStream, currDbFileStream);
+
+                currDbFileStream.flush();
+                currDbFileStream.close();
+                importFileStream.close();
+
+                Toast.makeText(context, "Import completed successfully!", Toast.LENGTH_SHORT).show();
+            } catch (Exception e) {
+                Toast.makeText(context, "Something went wrong. File was unable to be imported", Toast.LENGTH_SHORT).show();
+            }
+
+
         }
     }
 
-    public static void exportDatabase(Activity context) throws IOException {
+    public static void exportDatabase(Activity context) {
 
-        // Check if user has given WRITE_EXTERNAL_STORAGE Permission.
+        // Check if user has given WRITE_EXTERNAL_STORAGE Permission
         boolean hasPermission = (ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED);
 
         if (!hasPermission) {
-            throw new IOException("WRITE_EXTERNAL_STORAGE permission not granted");
+            // Send request for permission. Handler is in SettingsActivity
+            ActivityCompat.requestPermissions(context,
+                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                    Constants.REQUEST_WRITE_PERMISSION_ID);
         } else {
             // Otherwise, go ahead and export
             try {
@@ -234,11 +277,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
                 OutputStream exportedDbFileStream = new FileOutputStream(EXPORTED_DB_FILE_PATH);
 
-                byte[] buffer = new byte[1024];
-                int length;
-                while ((length = currDbFileStream.read(buffer)) > 0){
-                    exportedDbFileStream.write(buffer, 0, length);
-                }
+                copyFile(currDbFileStream, exportedDbFileStream);
 
                 exportedDbFileStream.flush();
                 exportedDbFileStream.close();
@@ -248,6 +287,14 @@ public class DatabaseHandler extends SQLiteOpenHelper {
             } catch (Exception e) {
                 Toast.makeText(context, "Something went wrong. File was unable to be saved", Toast.LENGTH_SHORT).show();
             }
+        }
+    }
+
+    private static void copyFile(FileInputStream from, OutputStream to) throws IOException {
+        byte[] buffer = new byte[1024];
+        int length;
+        while ((length = from.read(buffer)) > 0){
+            to.write(buffer, 0, length);
         }
     }
 }

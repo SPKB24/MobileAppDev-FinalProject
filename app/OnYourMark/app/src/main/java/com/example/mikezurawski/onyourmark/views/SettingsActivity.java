@@ -17,7 +17,9 @@ import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.example.mikezurawski.onyourmark.R;
+import com.example.mikezurawski.onyourmark.database.BudgetItem;
 import com.example.mikezurawski.onyourmark.database.DatabaseHandler;
+import com.example.mikezurawski.onyourmark.other.Constants;
 import com.example.mikezurawski.onyourmark.other.SharedPreferenceHandler;
 
 import java.io.FileNotFoundException;
@@ -36,10 +38,15 @@ public class SettingsActivity extends AppCompatActivity {
     Context context;
     Activity activity;
 
+    // TODO: temp
+    DatabaseHandler database;
+
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
+
+        database = new DatabaseHandler(this);
 
         context = this;
         activity = this;
@@ -77,13 +84,11 @@ public class SettingsActivity extends AppCompatActivity {
         importDbBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                try {
-                    DatabaseHandler.importDatabase();
-                } catch (FileNotFoundException e) {
-                    System.out.println("Something went wrong");
-                    System.out.println(e.getMessage());
-                    e.printStackTrace();
-                }
+                System.out.println("BEFORE *******************");
+                displayAllData();
+                DatabaseHandler.importDatabase(activity);
+                System.out.println("AFTER *******************");
+                displayAllData();
             }
         });
 
@@ -91,19 +96,23 @@ public class SettingsActivity extends AppCompatActivity {
         exportDbBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                try {
-                    DatabaseHandler.exportDatabase(activity);
-                } catch (IOException e) {
-                    final int REQUEST_WRITE_STORAGE = 112;
-                    // WRITE_EXTERNAL_STORAGE PERMISSION not granted
-                    ActivityCompat.requestPermissions(SettingsActivity.this,
-                            new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                            REQUEST_WRITE_STORAGE);
-                }
+                DatabaseHandler.exportDatabase(activity);
             }
         });
 
         initMonthlyDisplay();
+    }
+
+    private void displayAllData() {
+        String toPrint = "";
+        for (BudgetItem item : database.getBudgetItems()) {
+            toPrint += " | id: " + item.getId()
+                    + " | category: " + item.getCategory()
+                    + " | date: " + item.getDate()
+                    + " | cost: " + item.getCost()
+                    + " |\n";
+        }
+        System.out.println(toPrint);
     }
 
     private void initMonthlyDisplay() {
@@ -133,27 +142,19 @@ public class SettingsActivity extends AppCompatActivity {
                                            @NonNull String permissions[],
                                            @NonNull int[] grantResults) {
 
-        final int REQUEST_READ_STORAGE  = 111;
-        final int REQUEST_WRITE_STORAGE = 112;
-
         switch (requestCode) {
-            case REQUEST_WRITE_STORAGE: {
-                // If request is cancelled, the result arrays are empty.
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    Toast.makeText(context, "Permission Granted", Toast.LENGTH_SHORT).show();
-                    try {
-                        // Got permission, go ahead and try again now, should work.
-                        DatabaseHandler.exportDatabase(activity);
-                    } catch (IOException e) {
-                        System.out.println(e.getMessage());
-                    }
-                } else {
+            case Constants.REQUEST_READ_PERMISSION_ID: {
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
+                    DatabaseHandler.importDatabase(activity);
+                else
                     Toast.makeText(context, "Permission DENIED", Toast.LENGTH_SHORT).show();
-                }
                 return;
             }
-            case REQUEST_READ_STORAGE: {
-
+            case Constants.REQUEST_WRITE_PERMISSION_ID: {
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
+                    DatabaseHandler.exportDatabase(activity);
+                else
+                    Toast.makeText(context, "Permission DENIED", Toast.LENGTH_SHORT).show();
             }
         }
     }
