@@ -17,13 +17,9 @@ import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.example.mikezurawski.onyourmark.R;
-import com.example.mikezurawski.onyourmark.database.BudgetItem;
 import com.example.mikezurawski.onyourmark.database.DatabaseHandler;
 import com.example.mikezurawski.onyourmark.other.Constants;
 import com.example.mikezurawski.onyourmark.other.SharedPreferenceHandler;
-
-import java.io.FileNotFoundException;
-import java.io.IOException;
 
 public class SettingsActivity extends AppCompatActivity {
 
@@ -38,15 +34,10 @@ public class SettingsActivity extends AppCompatActivity {
     Context context;
     Activity activity;
 
-    // TODO: temp
-    DatabaseHandler database;
-
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
-
-        database = new DatabaseHandler(this);
 
         context = this;
         activity = this;
@@ -84,11 +75,7 @@ public class SettingsActivity extends AppCompatActivity {
         importDbBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                System.out.println("BEFORE *******************");
-                displayAllData();
                 DatabaseHandler.importDatabase(activity);
-                System.out.println("AFTER *******************");
-                displayAllData();
             }
         });
 
@@ -101,18 +88,6 @@ public class SettingsActivity extends AppCompatActivity {
         });
 
         initMonthlyDisplay();
-    }
-
-    private void displayAllData() {
-        String toPrint = "";
-        for (BudgetItem item : database.getBudgetItems()) {
-            toPrint += " | id: " + item.getId()
-                    + " | category: " + item.getCategory()
-                    + " | date: " + item.getDate()
-                    + " | cost: " + item.getCost()
-                    + " |\n";
-        }
-        System.out.println(toPrint);
     }
 
     private void initMonthlyDisplay() {
