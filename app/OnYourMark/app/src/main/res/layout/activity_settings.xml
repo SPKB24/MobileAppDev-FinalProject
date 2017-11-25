@@ -107,6 +107,7 @@
                 android:layout_height="wrap_content">
 
                 <Button
+                    android:id="@+id/ImportDbBtn"
                     android:layout_marginRight="1dp"
                     android:textColor="@color/colorWhite"
                     android:text="Import"
@@ -119,6 +120,7 @@
                     android:layout_height="wrap_content" />
 
                 <Button
+                    android:id="@+id/ExportDbBtn"
                     android:layout_marginLeft="1dp"
                     android:textColor="@color/colorWhite"
                     android:text="Export"

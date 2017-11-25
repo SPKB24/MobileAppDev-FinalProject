@@ -1,15 +1,27 @@
 package com.example.mikezurawski.onyourmark.database;
 
+import android.Manifest;
+import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.os.Environment;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
+import android.widget.Toast;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 
 public class DatabaseHandler extends SQLiteOpenHelper {
 
@@ -35,8 +47,14 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     // ticker system for unique IDs
     private static int idTicker = 0;
 
+    // File Storage Location Path Item Thing
+    private static String DB_LOCAL_FILE_PATH;
+    private static String DB_STORED_FILE_PATH;
+
     public DatabaseHandler(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
+        DB_LOCAL_FILE_PATH = context.getDatabasePath(DATABASE_NAME).getPath();
+        DB_STORED_FILE_PATH = Environment.getExternalStorageDirectory() + "/" + DATABASE_NAME + ".db";
     }
 
     @Override
@@ -159,8 +177,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
                 budgetItem.setId(cursor.getString(0));
                 budgetItem.setDate(createDateObject(
-                        cursor.getInt(1),  // Day
-                        cursor.getInt(2),  // Month
+                        cursor.getInt(1),   // Day
+                        cursor.getInt(2),   // Month
                         cursor.getInt(3))); // Year
                 budgetItem.setCategory(cursor.getInt(4));
                 budgetItem.setCost(cursor.getDouble(5));
@@ -186,5 +204,51 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         Cursor cursor = db.rawQuery(countQuery, null);
 
         return cursor.getCount();
+    }
+
+    public static void importDatabase() throws FileNotFoundException {
+        final File file = new File(DB_STORED_FILE_PATH);
+
+        if (!file.exists()) {
+            throw new FileNotFoundException("No Backup file could be found");
+        }
+    }
+
+    public static void exportDatabase(Activity context) throws IOException {
+
+        // Check if user has given WRITE_EXTERNAL_STORAGE Permission.
+        boolean hasPermission = (ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED);
+
+        if (!hasPermission) {
+            throw new IOException("WRITE_EXTERNAL_STORAGE permission not granted");
+        } else {
+            // Otherwise, go ahead and export
+            try {
+                File currDbFile = new File(DB_LOCAL_FILE_PATH);
+                FileInputStream currDbFileStream = new FileInputStream(currDbFile);
+
+                File exportedDbFile = new File(DB_STORED_FILE_PATH);
+
+                if (exportedDbFile.exists())
+                    exportedDbFile.delete();
+                exportedDbFile.createNewFile();
+
+                OutputStream exportedDbFileStream = new FileOutputStream(DB_STORED_FILE_PATH);
+
+                byte[] buffer = new byte[1024];
+                int length;
+                while ((length = currDbFileStream.read(buffer)) > 0){
+                    exportedDbFileStream.write(buffer, 0, length);
+                }
+
+                exportedDbFileStream.flush();
+                exportedDbFileStream.close();
+                currDbFileStream.close();
+
+                Toast.makeText(context, "File Saved to " + DB_STORED_FILE_PATH, Toast.LENGTH_SHORT).show();
+            } catch (Exception e) {
+                Toast.makeText(context, "Something went wrong. File was unable to be saved", Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 }
