@@ -9,7 +9,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Environment;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.widget.Toast;
 
@@ -48,13 +47,13 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     private static int idTicker = 0;
 
     // File Storage Location Path Item Thing
-    private static String DB_LOCAL_FILE_PATH;
-    private static String DB_STORED_FILE_PATH;
+    private static String CURRENT_DB_FILE_PATH;
+    private static String EXPORTED_DB_FILE_PATH;
 
     public DatabaseHandler(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
-        DB_LOCAL_FILE_PATH = context.getDatabasePath(DATABASE_NAME).getPath();
-        DB_STORED_FILE_PATH = Environment.getExternalStorageDirectory() + "/" + DATABASE_NAME + ".db";
+        CURRENT_DB_FILE_PATH = context.getDatabasePath(DATABASE_NAME).getPath();
+        EXPORTED_DB_FILE_PATH = Environment.getExternalStorageDirectory() + "/" + DATABASE_NAME + ".db";
     }
 
     @Override
@@ -207,7 +206,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     }
 
     public static void importDatabase() throws FileNotFoundException {
-        final File file = new File(DB_STORED_FILE_PATH);
+        final File file = new File(EXPORTED_DB_FILE_PATH);
 
         if (!file.exists()) {
             throw new FileNotFoundException("No Backup file could be found");
@@ -224,16 +223,16 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         } else {
             // Otherwise, go ahead and export
             try {
-                File currDbFile = new File(DB_LOCAL_FILE_PATH);
+                File currDbFile = new File(CURRENT_DB_FILE_PATH);
                 FileInputStream currDbFileStream = new FileInputStream(currDbFile);
 
-                File exportedDbFile = new File(DB_STORED_FILE_PATH);
+                File exportedDbFile = new File(EXPORTED_DB_FILE_PATH);
 
                 if (exportedDbFile.exists())
                     exportedDbFile.delete();
                 exportedDbFile.createNewFile();
 
-                OutputStream exportedDbFileStream = new FileOutputStream(DB_STORED_FILE_PATH);
+                OutputStream exportedDbFileStream = new FileOutputStream(EXPORTED_DB_FILE_PATH);
 
                 byte[] buffer = new byte[1024];
                 int length;
@@ -245,7 +244,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 exportedDbFileStream.close();
                 currDbFileStream.close();
 
-                Toast.makeText(context, "File Saved to " + DB_STORED_FILE_PATH, Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "File Saved to " + EXPORTED_DB_FILE_PATH, Toast.LENGTH_SHORT).show();
             } catch (Exception e) {
                 Toast.makeText(context, "Something went wrong. File was unable to be saved", Toast.LENGTH_SHORT).show();
             }
