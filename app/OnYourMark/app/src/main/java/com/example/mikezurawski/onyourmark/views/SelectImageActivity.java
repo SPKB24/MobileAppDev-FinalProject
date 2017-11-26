@@ -33,6 +33,7 @@
 package com.example.mikezurawski.onyourmark.views;
 
 import android.content.Intent;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -50,6 +51,7 @@ import java.io.IOException;
 
 // The activity for the user to select a image and to detect faces in the image.
 public class SelectImageActivity extends AppCompatActivity {
+
     // Flag to indicate the request of the next task to be performed
     private static final int REQUEST_TAKE_PHOTO = 0;
     private static final int REQUEST_SELECT_IMAGE_IN_ALBUM = 1;
@@ -59,6 +61,28 @@ public class SelectImageActivity extends AppCompatActivity {
 
     // File of the photo taken with camera
     private File mFilePhotoTaken;
+    private String selectedImagePath;
+
+    /**
+     * Retrieves the path of the image URI
+     */
+    public String getPath(Uri uri) {
+        // just some safety built in
+        if( uri == null ) {
+            return null;
+        }
+        String[] projection = { MediaStore.Images.Media.DATA };
+        Cursor cursor = managedQuery(uri, projection, null, null, null);
+        if( cursor != null ){
+            int column_index = cursor
+                    .getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+            cursor.moveToFirst();
+            String path = cursor.getString(column_index);
+            cursor.close();
+            return path;
+        }
+        return uri.getPath();
+    }
 
     // When the activity is created, set all the member variables to initial state.
     @Override
@@ -95,18 +119,15 @@ public class SelectImageActivity extends AppCompatActivity {
                 break;
             case REQUEST_SELECT_IMAGE_IN_ALBUM:
                 if (resultCode == RESULT_OK) {
-                    Uri imageUri;
-                    if (data == null || data.getData() == null) {
-                        imageUri = mUriPhotoTaken;
-                    } else {
-                        imageUri = data.getData();
+                    if (requestCode == REQUEST_SELECT_IMAGE_IN_ALBUM) {
+                        Uri selectedImageUri = data.getData();
+                        selectedImagePath = getPath(selectedImageUri);
+                        Intent intent = new Intent();
+                        intent.setData(selectedImageUri);
+                        setResult(RESULT_OK, intent);
+                        finish();
                     }
-                    Intent intent = new Intent();
-                    intent.setData(imageUri);
-                    setResult(RESULT_OK, intent);
-                    finish();
                 }
-
                 break;
             default:
                 break;
@@ -145,11 +166,11 @@ public class SelectImageActivity extends AppCompatActivity {
 
     // When the button of "Select a Photo in Album" is pressed.
     public void selectImageInAlbum(View view) {
-        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-        intent.setType("mFilePhotoTaken/*");
-        if (intent.resolveActivity(getPackageManager()) != null) {
-            startActivityForResult(intent, REQUEST_SELECT_IMAGE_IN_ALBUM);
-        }
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent,
+                "Select Picture"), REQUEST_SELECT_IMAGE_IN_ALBUM);
     }
 
     // Set the information panel on screen.
