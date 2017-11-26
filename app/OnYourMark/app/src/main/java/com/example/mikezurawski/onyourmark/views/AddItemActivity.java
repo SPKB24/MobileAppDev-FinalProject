@@ -200,7 +200,6 @@ public class AddItemActivity extends AppCompatActivity {
                 Gson gson = new Gson();
                 HandwritingRecognitionOperationResult r = gson.fromJson(data, HandwritingRecognitionOperationResult.class);
 
-
                 StringBuilder resultBuilder = new StringBuilder();
                 //if recognition result status is failed. display failed
                 if (r.getStatus().equals("Failed")) {
@@ -211,15 +210,10 @@ public class AddItemActivity extends AppCompatActivity {
                         // Getting words
                         for (HandwritingTextWord word : line.getWords()) {
                             resultBuilder.append(word.getText() + " ");
-                            Log.v("json", "HOLAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAa");
                         }
                         resultBuilder.append("\n");
-                        Log.v("json", "HOLAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAa");
-
                     }
                     resultBuilder.append("\n");
-                    Log.v("json", "HOLAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAa");
-
                 }
 
                 recognitionActivity.get().editText.setText(resultBuilder);
