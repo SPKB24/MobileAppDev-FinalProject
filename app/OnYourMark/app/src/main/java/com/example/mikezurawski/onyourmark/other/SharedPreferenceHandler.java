@@ -11,15 +11,13 @@ import static android.content.Context.MODE_PRIVATE;
 
 public class SharedPreferenceHandler {
 
-    private Context context;
     private SharedPreferences preferences;
 
     private final String SHARED_PREFS_KEY = "on_your_mark_prefs";
     private final String SHARED_PREFS_MONTHLY_LIMIT_KEY = "limit";
 
     public SharedPreferenceHandler(final Context _context) {
-        this.context = _context;
-        this.preferences = this.context.getSharedPreferences(SHARED_PREFS_KEY, MODE_PRIVATE);
+        this.preferences = _context.getSharedPreferences(SHARED_PREFS_KEY, MODE_PRIVATE);
     }
 
     public void storeFloat(final Float input) {
@@ -30,5 +28,10 @@ public class SharedPreferenceHandler {
 
     public Float getFloat() {
         return this.preferences.getFloat(SHARED_PREFS_MONTHLY_LIMIT_KEY, 0.0f);
+    }
+
+    public String getFloatAsString() {
+        Float toReturn = this.preferences.getFloat(SHARED_PREFS_MONTHLY_LIMIT_KEY, 0.0f);
+        return String.format("%.2f", toReturn);
     }
 }
