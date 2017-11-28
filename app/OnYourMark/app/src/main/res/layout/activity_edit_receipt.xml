@@ -17,28 +17,83 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="vertical">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
 
-            <TextView
-                android:text="@string/edit_total"
-                style="@style/CategoryStyle" />
+                <TextView
+                    android:text="@string/edit_total"
+                    style="@style/CategoryStyle" />
+
+                <LinearLayout
+                    android:layout_height="wrap_content"
+                    android:layout_width="0dp"
+                    android:layout_weight="2"
+                    android:paddingStart="2dp"
+                    android:orientation="vertical">
+
+                    <EditText
+                        android:id="@+id/editTotal"
+                        android:hint="@string/total"
+                        android:inputType="number"
+                        style="@style/EditorFieldStyle" />
+
+                </LinearLayout>
+            </LinearLayout>
 
             <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_width="0dp"
-                android:layout_weight="2"
-                android:paddingStart="2dp"
-                android:orientation="vertical">
+                android:orientation="horizontal">
 
-                <EditText
-                    android:id="@+id/editTotal"
-                    android:hint="@string/total"
-                    android:inputType="number"
-                    style="@style/EditorFieldStyle" />
+                <TextView
+                    android:text="@string/edit_company"
+                    style="@style/CategoryStyle" />
 
+                <LinearLayout
+                    android:layout_height="wrap_content"
+                    android:layout_width="0dp"
+                    android:layout_weight="2"
+                    android:paddingStart="2dp"
+                    android:orientation="vertical">
+
+                    <EditText
+                        android:id="@+id/editCompany"
+                        android:hint="@string/company"
+                        android:inputType="text"
+                        style="@style/EditorFieldStyle" />
+
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:text="Date thing here"
+                    style="@style/CategoryStyle" />
+
+                <LinearLayout
+                    android:layout_height="wrap_content"
+                    android:layout_width="0dp"
+                    android:layout_weight="2"
+                    android:paddingStart="2dp"
+                    android:orientation="vertical">
+
+                    <EditText
+                        android:id="@+id/editDate"
+                        android:hint="Date thing here"
+                        android:inputType="text"
+                        style="@style/EditorFieldStyle" />
+
+                </LinearLayout>
             </LinearLayout>
         </LinearLayout>
-
+        
     </ScrollView>
 
 

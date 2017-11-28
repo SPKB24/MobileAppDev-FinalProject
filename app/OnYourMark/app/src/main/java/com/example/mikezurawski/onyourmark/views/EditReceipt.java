@@ -26,6 +26,12 @@ public class EditReceipt extends AppCompatActivity {
             editText.setText(value, TextView.BufferType.EDITABLE);
         }
 
+        EditText editTextCompany = (EditText)findViewById(R.id.editCompany);
+        editTextCompany.setText("Chiptole", TextView.BufferType.EDITABLE);
+
+        EditText editTextDate = (EditText)findViewById(R.id.editDate);
+        editTextDate.setText("Date", TextView.BufferType.EDITABLE);
+
         Button saveButton = (Button) findViewById(R.id.save_button);
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
