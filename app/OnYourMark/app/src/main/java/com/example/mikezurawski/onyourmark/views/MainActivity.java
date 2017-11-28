@@ -1,10 +1,12 @@
 package com.example.mikezurawski.onyourmark.views;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.mikezurawski.onyourmark.R;
@@ -40,6 +42,9 @@ public class MainActivity extends AppCompatActivity {
     ArrayList<BudgetItem> monthlyItems = null;
     int currentMonth = -1;
 
+    LinearLayout monthly_breakdown_layout;
+    LinearLayout no_monthly_data_layout;
+
     PieChart monthly_summary_chart;
     PieChart monthly_breakdown_chart;
 
@@ -49,6 +54,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         new HamburgerMenuHandler(this, R.id.toolbar, "On Your Mark", 1).init();
+
+        monthly_breakdown_layout = findViewById(R.id.monthly_breakdown_items);
+        no_monthly_data_layout = findViewById(R.id.no_information);
 
         monthly_summary_chart = (PieChart) findViewById(R.id.monthly_summary_chart);
         monthly_breakdown_chart = (PieChart) findViewById(R.id.monthly_breakdown_chart);
@@ -90,6 +98,14 @@ public class MainActivity extends AppCompatActivity {
                 refreshInformation();
             }
         });
+        Button addNewItem = (Button) findViewById(R.id.new_item_btn);
+        addNewItem.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this, AddItemActivity.class);
+                startActivity(intent);
+            }
+        });
 
         refreshInformation();
         debugLogs();
@@ -108,9 +124,18 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void refreshInformation() {
+        monthlyItems = database.getBudgetItems(currentMonth);
         updateMonthText();
         refreshMonthlySummaryGraph();
-        refreshMonthlyBreakdownGraph();
+
+        if (monthlyItems.isEmpty()) {
+            monthly_breakdown_layout.setVisibility(View.GONE);
+            no_monthly_data_layout.setVisibility(View.VISIBLE);
+        } else {
+            monthly_breakdown_layout.setVisibility(View.VISIBLE);
+            no_monthly_data_layout.setVisibility(View.GONE);
+            refreshMonthlyBreakdownGraph();
+        }
     }
 
     public static double round(double value, int places) {
@@ -125,7 +150,6 @@ public class MainActivity extends AppCompatActivity {
     private void updateMonthText() {
         TextView monthText = (TextView) findViewById(R.id.month_switcher_text);
         monthText.setText(MONTHS[currentMonth]);
-        monthlyItems = database.getBudgetItems(currentMonth);
     }
 
     private void refreshMonthlySummaryGraph() {

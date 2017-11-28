@@ -207,6 +207,7 @@
 
             <!-- Monthly Breakdown Box -->
             <LinearLayout
+                android:id="@+id/monthly_breakdown_box"
                 android:orientation="vertical"
                 android:background="@drawable/layout_bg"
                 android:layout_margin="7dp"
@@ -262,6 +263,7 @@
                         android:layout_height="wrap_content"
                         android:text="Click on the button below to add your first budget"/>
                     <Button
+                        android:id="@+id/new_item_btn"
                         android:layout_marginTop="10dp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
