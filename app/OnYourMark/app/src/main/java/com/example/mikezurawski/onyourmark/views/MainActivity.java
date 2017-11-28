@@ -14,10 +14,8 @@ import com.example.mikezurawski.onyourmark.R;
 import com.example.mikezurawski.onyourmark.database.BudgetItem;
 import com.example.mikezurawski.onyourmark.database.DatabaseHandler;
 import com.example.mikezurawski.onyourmark.other.SharedPreferenceHandler;
-import com.github.mikephil.charting.animation.Easing;
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.components.Description;
-import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
@@ -109,6 +107,8 @@ public class MainActivity extends AppCompatActivity {
 
         refreshInformation();
         debugLogs();
+
+        addNewCategoryItem("Category Name", 200.0f);
     }
 
     private void debugLogs() {
@@ -237,16 +237,27 @@ public class MainActivity extends AppCompatActivity {
         PieDataSet set = new PieDataSet(entries, "Monthly Money Leftovers");
         set.setColors(colors);
         set.setDrawValues(false);
-        PieData data = new PieData(set);
 
-        Legend legend = monthly_breakdown_chart.getLegend();
-        legend.setEnabled(false);
         Description description = new Description();
         description.setText("");
+
+        monthly_breakdown_chart.getLegend().setEnabled(false);
         monthly_breakdown_chart.setDescription(description);
-        monthly_breakdown_chart.setData(data);
+        monthly_breakdown_chart.setData(new PieData(set));
         monthly_breakdown_chart.animateY(500);
         monthly_breakdown_chart.setDrawHoleEnabled(false);
         monthly_breakdown_chart.invalidate(); // refresh
+    }
+
+    private void addNewCategoryItem(final String category, final Float cost) {
+        LinearLayout rowToAdd = (LinearLayout) getLayoutInflater().inflate(R.layout.monthly_breakdown_row_item, null);
+
+        TextView categoryTextView = (TextView) rowToAdd.findViewById(R.id.row_category_text);
+        categoryTextView.setText(category);
+
+        TextView costTextView = (TextView) rowToAdd.findViewById(R.id.row_cost_text);
+        costTextView.setText(String.format("$%.2f", cost));
+
+        monthly_breakdown_layout.addView(rowToAdd);
     }
 }

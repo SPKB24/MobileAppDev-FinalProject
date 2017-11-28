@@ -67,14 +67,16 @@
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content">
 
             <!-- Monthly Summary Box -->
             <LinearLayout
                 android:id="@+id/monthly_summary_box"
                 android:orientation="vertical"
                 android:background="@drawable/layout_bg"
-                android:layout_margin="7dp"
+                android:layout_marginTop="7dp"
+                android:layout_marginRight="7dp"
+                android:layout_marginLeft="7dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
@@ -123,9 +125,7 @@
                         <RelativeLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:paddingStart="5dp"
-                            android:paddingTop="5dp"
-                            android:paddingEnd="5dp">
+                            android:paddingTop="5dp">
 
                             <TextView
                                 android:textStyle="bold"
@@ -148,9 +148,7 @@
                         <RelativeLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:paddingStart="5dp"
-                            android:paddingBottom="5dp"
-                            android:paddingEnd="5dp">
+                            android:paddingBottom="5dp">
 
                             <TextView
                                 android:textStyle="bold"
@@ -180,7 +178,8 @@
                         <RelativeLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:padding="5dp">
+                            android:paddingTop="5dp"
+                            android:paddingBottom="5dp">
 
                             <TextView
                                 android:textStyle="bold"
@@ -230,7 +229,11 @@
                     android:visibility="visible"
                     android:orientation="vertical"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp"
+                    android:paddingBottom="16dp"
+                    android:paddingTop="10dp">
 
                     <com.github.mikephil.charting.charts.PieChart
                         android:id="@+id/monthly_breakdown_chart"
@@ -270,9 +273,7 @@
                         android:text="Add Item"/>
                 </LinearLayout>
 
-
             </LinearLayout>
-
         </LinearLayout>
     </ScrollView>
 </LinearLayout>
