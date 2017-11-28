@@ -2,6 +2,11 @@
 <resources>
     <color name="colorPrimary">#29c429</color>
     <color name="colorPrimaryDark">#277021</color>
-    <color name="colorAccent">#16daf4</color>
+    <color name="colorAccent">#394450</color>
     <color name="colorWhite">#FFFFFF</color>
+
+    <!-- Primary color for the editor -->
+    <color name="editorColorPrimary">#2D3640</color>
+    <!-- Primary dark color for the editor -->
+    <color name="editorColorPrimaryDark">#394450</color>
 </resources>

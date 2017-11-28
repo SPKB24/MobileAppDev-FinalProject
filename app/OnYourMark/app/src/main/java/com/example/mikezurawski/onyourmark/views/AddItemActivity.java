@@ -28,6 +28,11 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.lang.ref.WeakReference;
+import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.apache.commons.lang.StringUtils.isNumeric;
 
 public class AddItemActivity extends AppCompatActivity {
 
@@ -38,6 +43,7 @@ public class AddItemActivity extends AppCompatActivity {
     private EditText editText;
     private VisionServiceClient client;
     private int retryCountThreshold = 30;
+    private final static String MY_TAG = "myapp";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,7 +51,8 @@ public class AddItemActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add_item);
 
         if (client == null) {
-            client = new VisionServiceRestClient(getString(R.string.subscription_key), "https://westcentralus.api.cognitive.microsoft.com/vision/v1.0");
+            client = new VisionServiceRestClient(getString(R.string.subscription_key),
+                    "https://westcentralus.api.cognitive.microsoft.com/vision/v1.0");
         }
 
         buttonSelectImage = (Button) findViewById(R.id.buttonSelectImage);
@@ -162,9 +169,10 @@ public class AddItemActivity extends AppCompatActivity {
     }
 
     // Class
-    private static class doRequest extends AsyncTask<String, String, String> {
+    private class doRequest extends AsyncTask<String, String, String> {
         // Store error message
         private Exception e = null;
+        private String receiptTotal = "";
 
         private WeakReference<AddItemActivity> recognitionActivity;
 
@@ -206,12 +214,46 @@ public class AddItemActivity extends AppCompatActivity {
                     resultBuilder.append("Error: Recognition Failed");
                 } else {
                     // Getting lines
+                    List<String> myList = new ArrayList<String>();
+
+                    // Parse from response
                     for (HandwritingTextLine line : r.getRecognitionResult().getLines()) {
                         // Getting words
                         for (HandwritingTextWord word : line.getWords()) {
                             resultBuilder.append(word.getText() + " ");
+                            // Add words to list for parsing
+                            myList.add(word.getText().toLowerCase());
                         }
                         resultBuilder.append("\n");
+                    }
+                    // print for testing
+                    for (String w : myList) {
+                        Log.v(MY_TAG, w);
+                    }
+
+                    // Get subtotal
+                    int subtotalIndex = myList.indexOf("subtotal");
+                    int totalIndex = myList.indexOf("total");
+                    String strTotal = "";
+
+                    if(subtotalIndex != -1 || totalIndex != -1){
+                        // If we just find the total and not subTotal set that to subtotalIndex
+                        if (totalIndex >= 0 && subtotalIndex == -1) {
+                            subtotalIndex = totalIndex;
+                        }
+                        while (isNumeric(myList.get(subtotalIndex + 1))) {
+                            strTotal += (myList.get(subtotalIndex + 1));
+                            Log.v(MY_TAG, "Subtotal is: " + strTotal);
+                            subtotalIndex++;
+                        }
+
+                        // Check if number has a decimal, if not add one!!!
+                        if(!strTotal.contains(".")) {
+                            strTotal = new StringBuilder(strTotal).insert(
+                                    strTotal.length()-2, ".").toString();
+                            Log.v(MY_TAG,"Decimal value is: " + strTotal);
+                            receiptTotal = strTotal;
+                        }
                     }
                     resultBuilder.append("\n");
                 }
@@ -219,6 +261,11 @@ public class AddItemActivity extends AppCompatActivity {
                 recognitionActivity.get().editText.setText(resultBuilder);
             }
             recognitionActivity.get().buttonSelectImage.setEnabled(true);
+
+            // Give EditReceipt Activity the total
+            Intent i = new Intent(getApplicationContext(), EditReceipt.class);
+            i.putExtra("total", receiptTotal);
+            startActivity(i);
         }
     }
 }
