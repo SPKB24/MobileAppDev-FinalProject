@@ -62,27 +62,27 @@ public class SelectImageActivity extends AppCompatActivity {
     // File of the photo taken with camera
     private File mFilePhotoTaken;
     private String selectedImagePath;
-
-    /**
-     * Retrieves the path of the image URI
-     */
-    public String getPath(Uri uri) {
-        // just some safety built in
-        if( uri == null ) {
-            return null;
-        }
-        String[] projection = { MediaStore.Images.Media.DATA };
-        Cursor cursor = managedQuery(uri, projection, null, null, null);
-        if( cursor != null ){
-            int column_index = cursor
-                    .getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-            cursor.moveToFirst();
-            String path = cursor.getString(column_index);
-            cursor.close();
-            return path;
-        }
-        return uri.getPath();
-    }
+//
+//    /**
+//     * Retrieves the path of the image URI
+//     */
+//    public String getPath(Uri uri) {
+//        // just some safety built in
+//        if( uri == null ) {
+//            return null;
+//        }
+//        String[] projection = { MediaStore.Images.Media.DATA };
+//        Cursor cursor = managedQuery(uri, projection, null, null, null);
+//        if( cursor != null ){
+//            int column_index = cursor
+//                    .getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+//            cursor.moveToFirst();
+//            String path = cursor.getString(column_index);
+//            cursor.close();
+//            return path;
+//        }
+//        return uri.getPath();
+//    }
 
     // When the activity is created, set all the member variables to initial state.
     @Override
@@ -90,92 +90,92 @@ public class SelectImageActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_select_image);
     }
-
-    // Save the activity state when it's going to stop.
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putParcelable("ImageUri", mUriPhotoTaken);
-    }
-
-    // Recover the saved state when the activity is recreated.
-    @Override
-    protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
-        mUriPhotoTaken = savedInstanceState.getParcelable("ImageUri");
-    }
+    //
+    //    // Save the activity state when it's going to stop.
+    //    @Override
+    //    protected void onSaveInstanceState(Bundle outState) {
+    //        super.onSaveInstanceState(outState);
+    //        outState.putParcelable("ImageUri", mUriPhotoTaken);
+    //    }
+    //
+    //    // Recover the saved state when the activity is recreated.
+    //    @Override
+    //    protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
+    //        super.onRestoreInstanceState(savedInstanceState);
+    //        mUriPhotoTaken = savedInstanceState.getParcelable("ImageUri");
+    //    }
 
     // Deal with the result of selection of the photos and faces.
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        switch (requestCode) {
-            case REQUEST_TAKE_PHOTO:
-                if (resultCode == RESULT_OK) {
-                    Intent intent = new Intent();
-                    intent.setData(Uri.fromFile(mFilePhotoTaken));
-                    setResult(RESULT_OK, intent);
-                    finish();
-                }
-                break;
-            case REQUEST_SELECT_IMAGE_IN_ALBUM:
-                if (resultCode == RESULT_OK) {
-                    if (requestCode == REQUEST_SELECT_IMAGE_IN_ALBUM) {
-                        Uri selectedImageUri = data.getData();
-                        selectedImagePath = getPath(selectedImageUri);
-                        Intent intent = new Intent();
-                        intent.setData(selectedImageUri);
-                        setResult(RESULT_OK, intent);
-                        finish();
-                    }
-                }
-                break;
-            default:
-                break;
-        }
-    }
+//    @Override
+//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        switch (requestCode) {
+//            case REQUEST_TAKE_PHOTO:
+//                if (resultCode == RESULT_OK) {
+//                    Intent intent = new Intent();
+//                    intent.setData(Uri.fromFile(mFilePhotoTaken));
+//                    setResult(RESULT_OK, intent);
+//                    finish();
+//                }
+//                break;
+//            case REQUEST_SELECT_IMAGE_IN_ALBUM:
+//                if (resultCode == RESULT_OK) {
+//                    if (requestCode == REQUEST_SELECT_IMAGE_IN_ALBUM) {
+//                        Uri selectedImageUri = data.getData();
+//                        selectedImagePath = getPath(selectedImageUri);
+//                        Intent intent = new Intent();
+//                        intent.setData(selectedImageUri);
+//                        setResult(RESULT_OK, intent);
+//                        finish();
+//                    }
+//                }
+//                break;
+//            default:
+//                break;
+//        }
+//    }
+//
+//    // When the button of "Take a Photo with Camera" is pressed.
+//    public void takePhoto(View view) {
+//        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+//        if(intent.resolveActivity(getPackageManager()) != null) {
+//            // Save the photo taken to a temporary file.
+//            File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+//            try {
+//                mFilePhotoTaken = File.createTempFile(
+//                        "IMG_",  /* prefix */
+//                        ".jpg",         /* suffix */
+//                        storageDir      /* directory */
+//                );
+//
+//                // Create the File where the photo should go
+//                // Continue only if the File was successfully created
+//                if (mFilePhotoTaken != null) {
+//                    mUriPhotoTaken = FileProvider.getUriForFile(this,
+//                            "com.example.mikezurawski.onyourmark",
+//                            mFilePhotoTaken);
+//                    intent.putExtra(MediaStore.EXTRA_OUTPUT, mUriPhotoTaken);
+//
+//                    // Finally start camera activity
+//                    startActivityForResult(intent, REQUEST_TAKE_PHOTO);
+//                }
+//            } catch (IOException e) {
+//                setInfo(e.getMessage());
+//            }
+//        }
+//    }
 
-    // When the button of "Take a Photo with Camera" is pressed.
-    public void takePhoto(View view) {
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        if(intent.resolveActivity(getPackageManager()) != null) {
-            // Save the photo taken to a temporary file.
-            File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-            try {
-                mFilePhotoTaken = File.createTempFile(
-                        "IMG_",  /* prefix */
-                        ".jpg",         /* suffix */
-                        storageDir      /* directory */
-                );
-
-                // Create the File where the photo should go
-                // Continue only if the File was successfully created
-                if (mFilePhotoTaken != null) {
-                    mUriPhotoTaken = FileProvider.getUriForFile(this,
-                            "com.example.mikezurawski.onyourmark",
-                            mFilePhotoTaken);
-                    intent.putExtra(MediaStore.EXTRA_OUTPUT, mUriPhotoTaken);
-
-                    // Finally start camera activity
-                    startActivityForResult(intent, REQUEST_TAKE_PHOTO);
-                }
-            } catch (IOException e) {
-                setInfo(e.getMessage());
-            }
-        }
-    }
-
-    // When the button of "Select a Photo in Album" is pressed.
-    public void selectImageInAlbum(View view) {
-        Intent intent = new Intent();
-        intent.setType("image/*");
-        intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(Intent.createChooser(intent,
-                "Select Picture"), REQUEST_SELECT_IMAGE_IN_ALBUM);
-    }
-
-    // Set the information panel on screen.
-    private void setInfo(String info) {
-        TextView textView = (TextView) findViewById(R.id.info);
-        textView.setText(info);
-    }
+//    // When the button of "Select a Photo in Album" is pressed.
+//    public void selectImageInAlbum(View view) {
+//        Intent intent = new Intent();
+//        intent.setType("image/*");
+//        intent.setAction(Intent.ACTION_GET_CONTENT);
+//        startActivityForResult(Intent.createChooser(intent,
+//                "Select Picture"), REQUEST_SELECT_IMAGE_IN_ALBUM);
+//    }
+//
+//    // Set the information panel on screen.
+//    private void setInfo(String info) {
+//        TextView textView = (TextView) findViewById(R.id.info);
+//        textView.setText(info);
+//    }
 }

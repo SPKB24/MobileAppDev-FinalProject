@@ -1,18 +1,21 @@
 package com.example.mikezurawski.onyourmark.views;
 
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.example.mikezurawski.onyourmark.R;
 import com.google.gson.Gson;
@@ -26,9 +29,9 @@ import com.microsoft.projectoxford.vision.rest.VisionServiceException;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.lang.ref.WeakReference;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,7 +39,6 @@ import static org.apache.commons.lang.StringUtils.isNumeric;
 
 public class AddItemActivity extends AppCompatActivity {
 
-    private static final int REQUEST_SELECT_IMAGE = 0;
     private Button buttonSelectImage;
     private Uri imagUrl;
     private Bitmap bitmap;
@@ -44,6 +46,18 @@ public class AddItemActivity extends AppCompatActivity {
     private VisionServiceClient client;
     private int retryCountThreshold = 30;
     private final static String MY_TAG = "myapp";
+
+    // Flag to indicate the request of the next task to be performed
+    private static final int REQUEST_TAKE_PHOTO = 0;
+    private static final int REQUEST_SELECT_IMAGE_IN_ALBUM = 1;
+
+    // The URI of photo taken from gallery
+    private Uri mUriPhotoTaken;
+
+    // File of the photo taken with camera
+    private File mFilePhotoTaken;
+    private String selectedImagePath;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,69 +71,50 @@ public class AddItemActivity extends AppCompatActivity {
 
         buttonSelectImage = (Button) findViewById(R.id.buttonSelectImage);
         editText = (EditText) findViewById(R.id.editTextResult);
-    }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_recognize, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-    // Called when the "Select Image" button is clicked.
-    public void selectImage(View view) {
+        // Two buttons
         editText.setText("");
 
-        Intent intent;
-        intent = new Intent(AddItemActivity.this, SelectImageActivity.class);
-        startActivityForResult(intent, REQUEST_SELECT_IMAGE);
+        // Launch take photo
+        Button takePhotoButton = (Button) findViewById(R.id.buttonTakePhoto);
+        takePhotoButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                takePhoto();
+            }
+        });
+
+        // Get photo from the gallery
+        Button selectFromAlbumButtom = (Button) findViewById(R.id.buttonAlbumPhoto);
+        selectFromAlbumButtom.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                selectImageInAlbum();
+            }
+        });
     }
 
     // Called when image selection is done.
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         Log.d("AnalyzeActivity", "onActivityResult");
-        switch (requestCode) {
-            case REQUEST_SELECT_IMAGE:
-                if (resultCode == RESULT_OK) {
-                    // If image is selected successfully, set the image URI and bitmap.
-                    imagUrl = data.getData();
 
-                    bitmap = ImageHelper.loadSizeLimitedBitmapFromUri(
-                            imagUrl, getContentResolver());
-                    if (bitmap != null) {
-                        // Show the image on screen.
-                        ImageView imageView = (ImageView) findViewById(R.id.selectedImage);
-                        imageView.setImageBitmap(bitmap);
+        imagUrl = data.getData();
 
-                        // Add detection log.
-                        Log.d("AnalyzeActivity", "Image: " + imagUrl + " resized to " + bitmap.getWidth()
-                                + "x" + bitmap.getHeight());
+        bitmap = ImageHelper.loadSizeLimitedBitmapFromUri(
+                imagUrl, getContentResolver());
+        if (bitmap != null) {
+            // Show the image on screen.
+            ImageView imageView = (ImageView) findViewById(R.id.selectedImage);
+            imageView.setImageBitmap(bitmap);
 
-                        doRecognize();
-                    }
-                }
-                break;
-            default:
-                break;
+            // Add detection log.
+            Log.d("AnalyzeActivity", "Image: " + imagUrl + " resized to " + bitmap.getWidth()
+                    + "x" + bitmap.getHeight());
+
+            doRecognize();
         }
     }
-
 
     public void doRecognize() {
         buttonSelectImage.setEnabled(false);
@@ -166,6 +161,72 @@ public class AddItemActivity extends AppCompatActivity {
             throw ex;
         }
 
+    }
+
+    /**
+     * Retrieves the path of the image URI
+     */
+    public String getPath(Uri uri) {
+        // just some safety built in
+        if( uri == null ) {
+            return null;
+        }
+        String[] projection = { MediaStore.Images.Media.DATA };
+        Cursor cursor = managedQuery(uri, projection, null, null, null);
+        if( cursor != null ){
+            int column_index = cursor
+                    .getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+            cursor.moveToFirst();
+            String path = cursor.getString(column_index);
+            cursor.close();
+            return path;
+        }
+        return uri.getPath();
+    }
+
+    // When the button of "Take a Photo with Camera" is pressed.
+    public void takePhoto() {
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if(intent.resolveActivity(getPackageManager()) != null) {
+            // Save the photo taken to a temporary file.
+            File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+            try {
+                mFilePhotoTaken = File.createTempFile(
+                        "IMG_",  /* prefix */
+                        ".jpg",         /* suffix */
+                        storageDir      /* directory */
+                );
+
+                // Create the File where the photo should go
+                // Continue only if the File was successfully created
+                if (mFilePhotoTaken != null) {
+                    mUriPhotoTaken = FileProvider.getUriForFile(this,
+                            "com.example.mikezurawski.onyourmark",
+                            mFilePhotoTaken);
+                    intent.putExtra(MediaStore.EXTRA_OUTPUT, mUriPhotoTaken);
+
+                    // Finally start camera activity
+                    startActivityForResult(intent, REQUEST_TAKE_PHOTO);
+                }
+            } catch (IOException e) {
+                setInfo(e.getMessage());
+            }
+        }
+    }
+
+    // When the button of "Select a Photo in Album" is pressed.
+    public void selectImageInAlbum() {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent,
+                "Select Picture"), REQUEST_SELECT_IMAGE_IN_ALBUM);
+    }
+
+    // Set the information panel on screen.
+    private void setInfo(String info) {
+        TextView textView = (TextView) findViewById(R.id.info);
+        textView.setText(info);
     }
 
     // Class
