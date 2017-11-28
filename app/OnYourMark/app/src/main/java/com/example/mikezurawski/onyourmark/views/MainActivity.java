@@ -11,6 +11,8 @@ import com.example.mikezurawski.onyourmark.R;
 
 import com.example.mikezurawski.onyourmark.database.BudgetItem;
 import com.example.mikezurawski.onyourmark.database.DatabaseHandler;
+import com.example.mikezurawski.onyourmark.other.SharedPreferenceHandler;
+import com.github.mikephil.charting.animation.Easing;
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.components.Description;
 import com.github.mikephil.charting.components.Legend;
@@ -38,14 +40,18 @@ public class MainActivity extends AppCompatActivity {
     ArrayList<BudgetItem> monthlyItems = null;
     int currentMonth = -1;
 
+    PieChart monthly_summary_chart;
+    PieChart monthly_breakdown_chart;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         new HamburgerMenuHandler(this, R.id.toolbar, "On Your Mark", 1).init();
-        initMonthSwitcher();
-        initMonthlySummary();
+
+        monthly_summary_chart = (PieChart) findViewById(R.id.monthly_summary_chart);
+        monthly_breakdown_chart = (PieChart) findViewById(R.id.monthly_breakdown_chart);
 
         database = new DatabaseHandler(this);
         database.resetDB();
@@ -53,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
 
         for (int i = 0; i < 50; i++) {
             BudgetItem budgetItem = new BudgetItem();
-            final double cost = rand.nextDouble() * (999.50 - 1.50) + 1.50;
+            final double cost = rand.nextDouble() * (100.00 - 1.50) + 1.50;
             budgetItem.setCategory(rand.nextInt(5));
             budgetItem.setCost(round(cost, 2));
             Calendar cal = Calendar.getInstance();
@@ -65,7 +71,6 @@ public class MainActivity extends AppCompatActivity {
         Calendar cal = Calendar.getInstance();
         cal.setTime(new Date());
         currentMonth = cal.get(Calendar.MONTH);
-        refreshGraph();
 
         Button backMonthButton = (Button) findViewById(R.id.back_month_btn);
         backMonthButton.setOnClickListener(new View.OnClickListener() {
@@ -74,25 +79,23 @@ public class MainActivity extends AppCompatActivity {
                 if (currentMonth-- == 0) {
                     currentMonth = 11;
                 }
-                updateMonthText();
-                refreshGraph();
+                refreshInformation();
             }
         });
         Button forwardMonthButton = (Button) findViewById(R.id.forward_month_btn);
         forwardMonthButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                currentMonth  = (currentMonth + 1) % 12;
-                updateMonthText();
-                refreshGraph();
+                currentMonth = (currentMonth + 1) % 12;
+                refreshInformation();
             }
         });
 
-        displayAllData();
+        refreshInformation();
+        debugLogs();
     }
 
-    // TODO: Remove -- Debugging only
-    private void displayAllData() {
+    private void debugLogs() {
         String toPrint = "";
         for (BudgetItem item : database.getBudgetItems()) {
             toPrint += " | id: " + item.getId()
@@ -104,46 +107,10 @@ public class MainActivity extends AppCompatActivity {
         System.out.println(toPrint);
     }
 
-    /**
-     * Initial the month switcher and return the current month index
-     * @return
-     */
-    private void initMonthSwitcher() {
-
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(new Date());
-        currentMonth = cal.get(Calendar.MONTH);
+    private void refreshInformation() {
         updateMonthText();
-    }
-
-    private void initMonthlySummary() {
-
-        PieChart pieChart = (PieChart) findViewById(R.id.chart);
-
-        List<PieEntry> entries = new ArrayList<>();
-
-        entries.add(new PieEntry(60.5f, ""));
-        entries.add(new PieEntry(39.5f, ""));
-
-        final int[] MY_COLORS = {Color.BLUE, Color.RED};
-        ArrayList<Integer> colors = new ArrayList<Integer>();
-
-        for(int c: MY_COLORS) colors.add(c);
-
-        PieDataSet set = new PieDataSet(entries, "Monthly Money Leftovers");
-        set.setColors(colors);
-        set.setDrawValues(false);
-        PieData data = new PieData(set);
-
-        Legend legend = pieChart.getLegend();
-        legend.setEnabled(false);
-        Description description = new Description();
-        description.setText("");
-        pieChart.setDescription(description);
-        pieChart.setData(data);
-        pieChart.animateY(500);
-        pieChart.setDrawHoleEnabled(false);
-        pieChart.invalidate(); // refresh
+        refreshMonthlySummaryGraph();
+        refreshMonthlyBreakdownGraph();
     }
 
     public static double round(double value, int places) {
@@ -158,10 +125,61 @@ public class MainActivity extends AppCompatActivity {
     private void updateMonthText() {
         TextView monthText = (TextView) findViewById(R.id.month_switcher_text);
         monthText.setText(MONTHS[currentMonth]);
+        monthlyItems = database.getBudgetItems(currentMonth);
     }
 
-    private void refreshGraph() {
-        monthlyItems = database.getBudgetItems(currentMonth);
+    private void refreshMonthlySummaryGraph() {
+
+        TextView spentTxt = findViewById(R.id.monthly_summary_spent_txt);
+        TextView remainingTxt = findViewById(R.id.monthly_summary_remaining_txt);
+        TextView totalTxt = findViewById(R.id.monthly_summary_total_txt);
+
+        // Get monthly spending limit
+        SharedPreferenceHandler sharedPreferences = new SharedPreferenceHandler(this);
+        Float monthlySpendingLimit = sharedPreferences.getFloat();
+
+        // Get this months spending information
+        float totalSpent = 0.0f;
+        for (BudgetItem budgetItem : monthlyItems) {
+            totalSpent += budgetItem.getCost();
+        }
+
+        // Set TextViews text
+        Float totalRemaining = monthlySpendingLimit - totalSpent;
+        spentTxt.setText(String.format("$%.2f", totalSpent));
+        remainingTxt.setText(String.format("$%.2f", totalRemaining));
+        totalTxt.setText(String.format("$%.2f", monthlySpendingLimit));
+
+        // Setup chart
+        List<PieEntry> entries = new ArrayList<>();
+        ArrayList<Integer> colors = new ArrayList<>();
+        colors.add(Color.rgb(204,68,75)); // RED
+        colors.add(Color.rgb(52,89,149)); // BLUE
+
+        if (totalSpent > monthlySpendingLimit) {
+            entries.add(new PieEntry(1, "spent"));
+        } else {
+            entries.add(new PieEntry((totalSpent / monthlySpendingLimit), "spent"));
+            entries.add(new PieEntry((totalRemaining / monthlySpendingLimit), "remaining"));
+        }
+
+        PieDataSet set = new PieDataSet(entries, "");
+        set.setColors(colors);
+        set.setDrawValues(false);
+
+        Description description = new Description();
+        description.setText("");
+
+        monthly_summary_chart.getLegend().setEnabled(false);
+        monthly_summary_chart.setDrawEntryLabels(false);
+        monthly_summary_chart.setDescription(description);
+        monthly_summary_chart.setData(new PieData(set));
+        monthly_summary_chart.animateY(500);
+        monthly_summary_chart.setDrawHoleEnabled(false);
+        monthly_summary_chart.invalidate(); // refresh
+    }
+
+    private void refreshMonthlyBreakdownGraph() {
         System.out.println("*** START ***");
         for (BudgetItem budgetItem : monthlyItems) {
             System.out.println("id: " + budgetItem.getId());
@@ -172,7 +190,6 @@ public class MainActivity extends AppCompatActivity {
 
         double[] spentPerCategory = new double[6];
         double totalSpent = 0;
-        PieChart pieChart = (PieChart) findViewById(R.id.chart);
 
         Arrays.fill(spentPerCategory, 0);
         for (BudgetItem budgetItem : monthlyItems) {
@@ -193,19 +210,19 @@ public class MainActivity extends AppCompatActivity {
 
         for(int c: MY_COLORS) colors.add(c);
 
-
         PieDataSet set = new PieDataSet(entries, "Monthly Money Leftovers");
         set.setColors(colors);
         set.setDrawValues(false);
         PieData data = new PieData(set);
 
-        Legend legend = pieChart.getLegend();
+        Legend legend = monthly_breakdown_chart.getLegend();
         legend.setEnabled(false);
         Description description = new Description();
         description.setText("");
-        pieChart.setDescription(description);
-        pieChart.setData(data);
-        pieChart.animateY(500);
-        pieChart.invalidate(); // refresh
+        monthly_breakdown_chart.setDescription(description);
+        monthly_breakdown_chart.setData(data);
+        monthly_breakdown_chart.animateY(500);
+        monthly_breakdown_chart.setDrawHoleEnabled(false);
+        monthly_breakdown_chart.invalidate(); // refresh
     }
 }

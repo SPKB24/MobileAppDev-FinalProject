@@ -94,13 +94,14 @@
 
                     <!-- Pie Chart -->
                     <com.github.mikephil.charting.charts.PieChart
-                        android:id="@+id/chart"
+                        android:id="@+id/monthly_summary_chart"
                         android:layout_marginTop="10dp"
                         android:layout_marginBottom="10dp"
                         android:layout_width="150dp"
                         android:layout_weight="0"
                         android:layout_height="100dp" />
 
+                    <!-- Divider -->
                     <View
                         android:layout_width="1dp"
                         android:layout_marginTop="20dp"
@@ -108,25 +109,98 @@
                         android:layout_marginRight="27dp"
                         android:background="@color/colorPrimaryDark"/>
 
-                    <!-- Spent and Remaining Info -->
+                    <!-- Money Details Section -->
                     <LinearLayout
                         android:orientation="vertical"
                         android:layout_width="fill_parent"
                         android:layout_weight="1"
                         android:layout_height="match_parent"
                         android:layout_gravity="center_vertical"
-                        android:gravity="center_vertical">
-                        <TextView
-                            android:textColor="@color/colorWhite"
-                            android:layout_width="wrap_content"
+                        android:gravity="center_vertical"
+                        android:paddingRight="30dp">
+
+                        <!-- Spent Information -->
+                        <RelativeLayout
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:paddingBottom="20dp"
-                            android:text="SPENT"/>
-                        <TextView
-                            android:textColor="@color/colorWhite"
-                            android:layout_width="wrap_content"
+                            android:paddingStart="5dp"
+                            android:paddingTop="5dp"
+                            android:paddingEnd="5dp">
+
+                            <TextView
+                                android:textStyle="bold"
+                                android:layout_alignParentStart="true"
+                                android:textColor="@color/colorRed"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="SPENT"/>
+
+                            <TextView
+                                android:id="@+id/monthly_summary_spent_txt"
+                                android:textColor="@color/colorWhite"
+                                android:layout_alignParentEnd="true"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="$200.00"/>
+                        </RelativeLayout>
+
+                        <!-- Remaining Information -->
+                        <RelativeLayout
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="REMAINING"/>
+                            android:paddingStart="5dp"
+                            android:paddingBottom="5dp"
+                            android:paddingEnd="5dp">
+
+                            <TextView
+                                android:textStyle="bold"
+                                android:layout_alignParentStart="true"
+                                android:textColor="@color/colorBlue"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="REMAINING"/>
+
+                            <TextView
+                                android:id="@+id/monthly_summary_remaining_txt"
+                                android:textColor="@color/colorWhite"
+                                android:layout_alignParentEnd="true"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="$0.00"/>
+
+                        </RelativeLayout>
+
+                        <!-- Divider -->
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="0.5dp"
+                            android:background="@color/md_black_1000"/>
+
+                        <!-- Total Monthly Information -->
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:padding="5dp">
+
+                            <TextView
+                                android:textStyle="bold"
+                                android:layout_alignParentStart="true"
+                                android:textColor="@color/colorWhite"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="TOTAL"/>
+
+                            <TextView
+                                android:id="@+id/monthly_summary_total_txt"
+                                android:textStyle="bold"
+                                android:textColor="@color/colorWhite"
+                                android:layout_alignParentEnd="true"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="$0.00"/>
+
+                        </RelativeLayout>
+
                     </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
@@ -152,39 +226,51 @@
                 <!-- Monthly Breakdown Items List -->
                 <LinearLayout
                     android:id="@+id/monthly_breakdown_items"
+                    android:visibility="visible"
                     android:orientation="vertical"
                     android:layout_width="match_parent"
-                    android:layout_height="400dp">
+                    android:layout_height="wrap_content">
+
+                    <com.github.mikephil.charting.charts.PieChart
+                        android:id="@+id/monthly_breakdown_chart"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="10dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="150dp" />
 
                 </LinearLayout>
+
+                <!-- No Data to Display -->
+                <LinearLayout
+                    android:id="@+id/no_information"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:visibility="gone"
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="center">
+                    <TextView
+                        android:textColor="@color/colorWhite"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Uh oh! Looks like you don't have any data"/>
+                    <TextView
+                        android:textColor="@color/colorWhite"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Click on the button below to add your first budget"/>
+                    <Button
+                        android:layout_marginTop="10dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Add Item"/>
+                </LinearLayout>
+
 
             </LinearLayout>
 
         </LinearLayout>
     </ScrollView>
-
-    <!-- No Data to Display -->
-    <LinearLayout
-        android:id="@+id/no_information"
-        android:visibility="visible"
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_gravity="center"
-        android:gravity="center">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Uh oh! Looks like you don't have any data"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Click on the button below to add your first budget"/>
-        <Button
-            android:layout_marginTop="40dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Add Item"/>
-    </LinearLayout>
-
 </LinearLayout>
