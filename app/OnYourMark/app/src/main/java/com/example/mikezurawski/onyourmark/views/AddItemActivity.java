@@ -40,6 +40,9 @@ import static org.apache.commons.lang.StringUtils.isNumeric;
 public class AddItemActivity extends AppCompatActivity {
 
     private Button buttonSelectImage;
+    private Button takePhotoButton;
+    private Button selectFromAlbumButtom;
+
     private Uri imagUrl;
     private Bitmap bitmap;
     private EditText editText;
@@ -69,14 +72,13 @@ public class AddItemActivity extends AppCompatActivity {
                     "https://westcentralus.api.cognitive.microsoft.com/vision/v1.0");
         }
 
-        buttonSelectImage = (Button) findViewById(R.id.buttonSelectImage);
         editText = (EditText) findViewById(R.id.editTextResult);
 
         // Two buttons
         editText.setText("");
 
         // Launch take photo
-        Button takePhotoButton = (Button) findViewById(R.id.buttonTakePhoto);
+        takePhotoButton = (Button) findViewById(R.id.buttonTakePhoto);
         takePhotoButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -85,7 +87,7 @@ public class AddItemActivity extends AppCompatActivity {
         });
 
         // Get photo from the gallery
-        Button selectFromAlbumButtom = (Button) findViewById(R.id.buttonAlbumPhoto);
+        selectFromAlbumButtom = (Button) findViewById(R.id.buttonAlbumPhoto);
         selectFromAlbumButtom.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -117,7 +119,9 @@ public class AddItemActivity extends AppCompatActivity {
     }
 
     public void doRecognize() {
-        buttonSelectImage.setEnabled(false);
+        selectFromAlbumButtom.setEnabled(false);
+        takePhotoButton.setEnabled(false);
+
         editText.setText("Analyzing...");
 
         try {
@@ -295,38 +299,86 @@ public class AddItemActivity extends AppCompatActivity {
                     // Get subtotal
                     int subtotalIndex = myList.indexOf("subtotal");
                     int totalIndex = myList.indexOf("total");
+                    int taxIndex = myList.indexOf("tax");
                     String strTotal = "";
 
-                    if(subtotalIndex != -1 || totalIndex != -1){
-                        // If we just find the total and not subTotal set that to subtotalIndex
-                        if (totalIndex >= 0 && subtotalIndex == -1) {
-                            subtotalIndex = totalIndex;
-                        }
-                        while (isNumeric(myList.get(subtotalIndex + 1))) {
-                            strTotal += (myList.get(subtotalIndex + 1));
-                            Log.v(MY_TAG, "Subtotal is: " + strTotal);
-                            subtotalIndex++;
-                        }
+                    if(subtotalIndex >= 0 ) {
+                        // Subtotal found, need to add tax to subtotal
+                        strTotal = getNumbers(myList, subtotalIndex);
 
-                        // Check if number has a decimal, if not add one!!!
-                        if(!strTotal.contains(".")) {
-                            strTotal = new StringBuilder(strTotal).insert(
-                                    strTotal.length()-2, ".").toString();
-                            Log.v(MY_TAG,"Decimal value is: " + strTotal);
+                        // Try to get tax
+                        String tax = "";
+                        if(taxIndex >= 0) {
+                            tax = getNumbers(myList, taxIndex);
+                            try {
+                                double mytax = Double.parseDouble(addDecimal(tax));
+                                double mytotal = Double.parseDouble(addDecimal(strTotal));
+                                receiptTotal = String.valueOf(mytax + mytotal);
+                            } catch (Exception e) {
+                                receiptTotal = "";
+                                // no si
+                            }
+                        } else {
                             receiptTotal = strTotal;
                         }
+                    }
+                    else if(totalIndex >= 0) {
+                        strTotal = getNumbers(myList, totalIndex);
+                        strTotal = addDecimal(strTotal);
+                        receiptTotal = strTotal;
+                    }
+                    else {
+                    // Did not find anything
+                    receiptTotal = "";
                     }
                     resultBuilder.append("\n");
                 }
 
                 recognitionActivity.get().editText.setText(resultBuilder);
             }
-            recognitionActivity.get().buttonSelectImage.setEnabled(true);
+            recognitionActivity.get().takePhotoButton.setEnabled(true);
+            recognitionActivity.get().selectFromAlbumButtom.setEnabled(true);
 
             // Give EditReceipt Activity the total
             Intent i = new Intent(getApplicationContext(), EditReceipt.class);
             i.putExtra("total", receiptTotal);
             startActivity(i);
+        }
+
+        /**
+         * Extract numbers from total/subtotal/tax
+         * @param myList
+         * @param index
+         * @return
+         */
+        public String getNumbers(List<String> myList, int index) {
+            String numbers = "";
+            for(int i = index + 1; i < myList.size(); i++) {
+                if(isNumeric(myList.get(i))) {
+                    numbers += (myList.get(i));
+                    Log.v(MY_TAG, "Total/Subtotal/Tax is: " + numbers);
+                } else {
+                    break;
+                }
+            }
+            return numbers;
+        }
+
+        /**
+         * Add decimal to string
+         * @param value
+         * @return
+         */
+        public String addDecimal (String value) {
+            // Check if number has a decimal, if not add one!!!
+            if(!value.contains(".")) {
+                value = new StringBuilder(value).insert(
+                        value.length()-2, ".").toString();
+                Log.v(MY_TAG,"Decimal value is: " + value);
+                return value;
+            } else {
+                return value;
+            }
         }
     }
 }

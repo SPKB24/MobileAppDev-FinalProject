@@ -18,18 +18,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="4dp"
-            android:text="Select an image to recognize receipt text"/>
+            android:text="Take a photo or select an image!"/>
         <LinearLayout
-            android:orientation="vertical"
+            android:orientation="horizontal"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content">
-
-            <Button
-                android:id="@+id/buttonSelectImage"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Select Image"
-                android:elevation="0dp" />
 
             <Button
                 android:id="@+id/buttonTakePhoto"
@@ -42,15 +35,21 @@
                 android:id="@+id/buttonAlbumPhoto"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Album photo"
+                android:layout_gravity="end"
+                android:text="Select Photo"
                 android:elevation="0dp" />
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
             <ImageView
                 android:id="@+id/selectedImage"
                 android:layout_width="200dp"
                 android:layout_height="200dp"
-                android:layout_toRightOf="@+id/image_control"
-                android:layout_toEndOf="@+id/image_control"
                 android:background="#E0E0E0"
                 android:layout_margin="6dp"/>
 
