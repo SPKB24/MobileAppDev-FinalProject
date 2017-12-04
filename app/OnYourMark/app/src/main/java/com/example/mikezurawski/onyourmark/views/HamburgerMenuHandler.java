@@ -111,7 +111,8 @@ class HamburgerMenuHandler {
                                 activity.startActivity(intent);
                                 break;
                             case 10:
-                                Toast.makeText(activity, "Yee", Toast.LENGTH_SHORT).show();
+                                intent = new Intent(activity, AboutActivity.class);
+                                activity.startActivity(intent);
                                 break;
                             default:
                                 Toast.makeText(activity, "You haven't configured an onClick event for this button", Toast.LENGTH_SHORT).show();
