@@ -15,4 +15,14 @@
         android:background="?android:attr/colorPrimary"
         app:titleTextColor="@color/colorWhite" />
 
+
+    <LinearLayout
+        android:id="@+id/about_page_layout"
+        android:orientation="vertical"
+        android:padding="16dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    </LinearLayout>
+
 </LinearLayout>
