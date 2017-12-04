@@ -3,6 +3,7 @@ package com.example.mikezurawski.onyourmark.views;
 import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
@@ -43,7 +44,7 @@ public class SettingsActivity extends AppCompatActivity {
         activity = this;
         preferences = new SharedPreferenceHandler(this);
 
-        new HamburgerMenuHandler(this, R.id.toolbar_settings, "Settings", 3).init();
+        new HamburgerMenuHandler(this, R.id.toolbar_settings, "Settings").init_subpage(true);
 
         monthly_limit_text = findViewById(R.id.monthly_limit_text);
         monthly_limit_edit_btn = findViewById(R.id.monthly_limit_edit_btn);
@@ -132,5 +133,12 @@ public class SettingsActivity extends AppCompatActivity {
                     Toast.makeText(context, "Permission DENIED", Toast.LENGTH_SHORT).show();
             }
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        finish();
+        startActivity(new Intent(context, MainActivity.class));
+
     }
 }

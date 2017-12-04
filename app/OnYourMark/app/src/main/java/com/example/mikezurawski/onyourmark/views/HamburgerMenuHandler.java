@@ -27,16 +27,14 @@ class HamburgerMenuHandler {
     private Activity activity;
     private int toolbar_id;
     private String page_title;
-    private int page_position;
 
-    HamburgerMenuHandler(final Activity activity, final int toolbar_id, final String page_title, final int page_position) {
+    HamburgerMenuHandler(final Activity activity, final int toolbar_id, final String page_title) {
         this.activity = activity;
         this.toolbar_id = toolbar_id;
         this.page_title = page_title;
-        this.page_position = page_position;
     }
 
-    void init() {
+    void init_homepage() {
         PrimaryDrawerItem item1 = new PrimaryDrawerItem()
                 .withIdentifier(1)
                 .withName("Home")
@@ -79,7 +77,7 @@ class HamburgerMenuHandler {
                 .withAccountHeader(headerResult)
                 .withCloseOnClick(true)
                 .withHeaderPadding(true)
-                .withSelectedItem(page_position)
+                .withSelectedItem(1)
                 .withToolbar(toolbar)
                 .addDrawerItems(
                         item1,
@@ -92,7 +90,7 @@ class HamburgerMenuHandler {
                     public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
                         Intent intent;
 
-                        if (position == page_position) {
+                        if (position == 1) {
                             drawer.closeDrawer();
                             return false;
                         }
@@ -120,5 +118,24 @@ class HamburgerMenuHandler {
                         return false;
                     }
                 }).build();
+
+        toolbar.setNavigationIcon(R.drawable.ic_menu_white_24dp);
+    }
+
+    void init_subpage(final boolean shouldReloadOnReturn) {
+        Toolbar toolbar = (Toolbar) activity.findViewById(toolbar_id);
+        toolbar.setTitle(page_title);
+        toolbar.setNavigationIcon(R.drawable.ic_menu_left_arrow);
+
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                activity.finish();
+
+                if (shouldReloadOnReturn) {
+                    activity.startActivity(new Intent(activity, MainActivity.class));
+                }
+            }
+        });
     }
 }

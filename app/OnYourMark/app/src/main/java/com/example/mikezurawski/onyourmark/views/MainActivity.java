@@ -51,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        new HamburgerMenuHandler(this, R.id.toolbar, "On Your Mark", 1).init();
+        new HamburgerMenuHandler(this, R.id.toolbar, "On Your Mark").init_homepage();
 
         monthly_breakdown_layout = findViewById(R.id.monthly_breakdown_items);
         no_monthly_data_layout = findViewById(R.id.no_information);
