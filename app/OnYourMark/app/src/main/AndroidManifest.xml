@@ -38,7 +38,8 @@
         <activity android:name=".views.AddItemActivity" />
         <activity android:name=".views.SelectImageActivity" />
         <activity android:name=".views.SettingsActivity" />
-        <activity android:name=".views.EditReceipt"></activity>
+        <activity android:name=".views.EditReceipt" />
+        <activity android:name=".views.AboutActivity"></activity>
     </application>
 
 </manifest>
