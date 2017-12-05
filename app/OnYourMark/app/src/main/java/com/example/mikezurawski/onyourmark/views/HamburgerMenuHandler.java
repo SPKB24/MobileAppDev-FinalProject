@@ -17,10 +17,6 @@ import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
 import com.mikepenz.materialdrawer.model.ProfileDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 
-/**
- * Created by sohit on 11/21/17.
- */
-
 class HamburgerMenuHandler {
 
     private Drawer drawer;

@@ -20,7 +20,7 @@ public class AboutActivity extends AppCompatActivity {
 
     String[] ANSWERS = {
             "A revolutionary application that uses the power of MACHINE LEARNING and OPTICAL CHARACTER RECOGNITION to make keeping track of your budget a breeze.",
-            "Sohit Pal, Mark Machado, & Dave Zurawski.\nWe are all students at the University of Massachusetts Lowell, making this app for Mobile App Dev 1."
+            "Sohit Pal, Dave Machado, & Mike Zurawski.\nWe are all students at the University of Massachusetts Lowell, making this app for Mobile App Dev 1."
     };
 
     @Override

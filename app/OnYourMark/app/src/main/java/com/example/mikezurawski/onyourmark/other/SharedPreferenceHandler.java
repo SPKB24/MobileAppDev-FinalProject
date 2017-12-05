@@ -5,10 +5,6 @@ import android.content.SharedPreferences;
 
 import static android.content.Context.MODE_PRIVATE;
 
-/**
- * Created by sohit on 11/22/17.
- */
-
 public class SharedPreferenceHandler {
 
     private SharedPreferences preferences;
