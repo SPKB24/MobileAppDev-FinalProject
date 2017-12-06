@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
 
         new HamburgerMenuHandler(this, R.id.toolbar, "On Your Mark").init_homepage();
 
-        monthly_breakdown_layout = findViewById(R.id.monthly_breakdown_items);
+        monthly_breakdown_layout = findViewById(R.id.monthly_breakdown_categories_layout);
         no_monthly_data_layout = findViewById(R.id.no_information);
 
         monthly_summary_chart = (PieChart) findViewById(R.id.monthly_summary_chart);
@@ -204,13 +204,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void refreshMonthlyBreakdownGraph() {
-        System.out.println("*** START ***");
-        for (BudgetItem budgetItem : monthlyItems) {
-            System.out.println("category: " + budgetItem.getCategory());
-            System.out.println("date: " + budgetItem.getDate());
-            System.out.println("cost: " + String.format("%.2f", budgetItem.getCost()));
-        }
-        System.out.println("*** END ***");
+        clearCategoriesOnCreate();
 
         HashMap<String, Double> categoryMap = new HashMap<>();
         double totalSpent = 0;
@@ -228,18 +222,14 @@ public class MainActivity extends AppCompatActivity {
         }
 
         Iterator it = categoryMap.entrySet().iterator();
+        List<PieEntry> entries = new ArrayList<>();
         while (it.hasNext()) {
             Map.Entry pair = (Map.Entry) it.next();
-
             addNewCategoryItem((String) pair.getKey(), (Double) pair.getValue());
-        }
 
-        List<PieEntry> entries = new ArrayList<>();
-
-        for (double spentC : categoryMap.values()) {
-            double rawPercentage = spentC / totalSpent;
+            double rawPercentage = (Double) pair.getValue() / totalSpent;
             float percentage = (float) rawPercentage;
-            entries.add(new PieEntry(percentage, ""));
+            entries.add(new PieEntry(percentage, (String) pair.getKey()));
         }
 
         final int[] MY_COLORS = {Color.BLUE, Color.RED, Color.GRAY, Color.CYAN, Color.GREEN};
@@ -262,13 +252,17 @@ public class MainActivity extends AppCompatActivity {
         monthly_breakdown_chart.invalidate(); // refresh
     }
 
+    private void clearCategoriesOnCreate() {
+        monthly_breakdown_layout.removeAllViews();
+    }
+
     private void addNewCategoryItem(final String category, final Double cost) {
         LinearLayout rowToAdd = (LinearLayout) getLayoutInflater().inflate(R.layout.monthly_breakdown_row_item, null);
 
-        TextView categoryTextView = (TextView) rowToAdd.findViewById(R.id.row_category_text);
+        TextView categoryTextView = rowToAdd.findViewById(R.id.row_category_text);
         categoryTextView.setText(category);
 
-        TextView costTextView = (TextView) rowToAdd.findViewById(R.id.row_cost_text);
+        TextView costTextView = rowToAdd.findViewById(R.id.row_cost_text);
         costTextView.setText(String.format("$%.2f", cost));
 
         monthly_breakdown_layout.addView(rowToAdd);
