@@ -138,7 +138,9 @@ public class SettingsActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         finish();
-        startActivity(new Intent(context, MainActivity.class));
+        Intent i = new Intent(SettingsActivity.this, MainActivity.class);
+        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(i);
 
     }
 }

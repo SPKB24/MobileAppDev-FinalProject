@@ -60,19 +60,19 @@ public class MainActivity extends AppCompatActivity {
         monthly_breakdown_chart = (PieChart) findViewById(R.id.monthly_breakdown_chart);
 
         database = new DatabaseHandler(this);
-        database.resetDB();
-        final Random rand = new Random();
-
-        for (int i = 0; i < 50; i++) {
-            BudgetItem budgetItem = new BudgetItem();
-            final double cost = rand.nextDouble() * (100.00 - 1.50) + 1.50;
-            budgetItem.setCategory(rand.nextInt(5));
-            budgetItem.setCost(round(cost, 2));
-            Calendar cal = Calendar.getInstance();
-            cal.set(2017, rand.nextInt(12), 9);
-            budgetItem.setDate(cal.getTime());
-            database.addBudgetItem(budgetItem);
-        }
+//        database.resetDB();
+//        final Random rand = new Random();
+//
+//        for (int i = 0; i < 50; i++) {
+//            BudgetItem budgetItem = new BudgetItem();
+//            final double cost = rand.nextDouble() * (100.00 - 1.50) + 1.50;
+//            budgetItem.setCategory(rand.nextInt(5));
+//            budgetItem.setCost(round(cost, 2));
+//            Calendar cal = Calendar.getInstance();
+//            cal.set(2017, rand.nextInt(12), 9);
+//            budgetItem.setDate(cal.getTime());
+//            database.addBudgetItem(budgetItem);
+//        }
 
         Calendar cal = Calendar.getInstance();
         cal.setTime(new Date());
@@ -114,8 +114,7 @@ public class MainActivity extends AppCompatActivity {
     private void debugLogs() {
         String toPrint = "";
         for (BudgetItem item : database.getBudgetItems()) {
-            toPrint += " | id: " + item.getId()
-                    + " | category: " + item.getCategory()
+            toPrint += " | category: " + item.getCategory()
                     + " | date: " + item.getDate()
                     + " | cost: " + item.getCost()
                     + " |\n";
@@ -206,9 +205,9 @@ public class MainActivity extends AppCompatActivity {
     private void refreshMonthlyBreakdownGraph() {
         System.out.println("*** START ***");
         for (BudgetItem budgetItem : monthlyItems) {
-            System.out.println("id: " + budgetItem.getId());
-            System.out.println("cate: " + budgetItem.getCategory());
-            System.out.println("cost" + budgetItem.getCost());
+            System.out.println("category: " + budgetItem.getCategory());
+            System.out.println("date: " + budgetItem.getDate());
+            System.out.println("cost: " + String.format("%.2f", budgetItem.getCost()));
         }
         System.out.println("*** END ***");
 
