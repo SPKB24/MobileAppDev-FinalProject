@@ -41,6 +41,7 @@ dependencies {
     implementation 'com.mindorks:paracamera:0.2.2'
     implementation 'com.github.PhilJay:MPAndroidChart:v3.0.2'
     implementation 'com.afollestad.material-dialogs:core:0.9.5.0'
+    implementation 'com.wdullaer:materialdatetimepicker:3.4.0'
 
     // Hamburger Menu Requirements
     implementation("com.mikepenz:materialdrawer:6.0.2@aar") { transitive = true }

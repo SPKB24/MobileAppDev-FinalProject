@@ -1,5 +1,6 @@
 package com.example.mikezurawski.onyourmark.views;
 
+import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -13,15 +14,19 @@ import android.widget.Toast;
 import com.example.mikezurawski.onyourmark.R;
 import com.example.mikezurawski.onyourmark.database.BudgetItem;
 import com.example.mikezurawski.onyourmark.database.DatabaseHandler;
+import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.IllegalFormatConversionException;
 import java.util.InputMismatchException;
 
-public class EditReceipt extends AppCompatActivity {
+public class EditReceipt extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
+
+    private Context context;
 
     EditText totalTxt;
     EditText dateTxt;
@@ -33,6 +38,8 @@ public class EditReceipt extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_receipt);
+
+        context = this;
 
         totalTxt = findViewById(R.id.editTotal);
         dateTxt = findViewById(R.id.editDate);
@@ -47,6 +54,21 @@ public class EditReceipt extends AppCompatActivity {
 
         dateFormat = new SimpleDateFormat("MM/dd/yyyy");
         dateTxt.setText(dateFormat.format(new Date()), TextView.BufferType.EDITABLE);
+        dateTxt.setFocusable(false);
+        dateTxt.setFocusableInTouchMode(false);
+        dateTxt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Calendar now = Calendar.getInstance();
+                DatePickerDialog dpd = DatePickerDialog.newInstance(
+                        EditReceipt.this,
+                        now.get(Calendar.YEAR),
+                        now.get(Calendar.MONTH),
+                        now.get(Calendar.DAY_OF_MONTH)
+                );
+                dpd.show(getFragmentManager(), "Datepickerdialog");
+            }
+        });
 
         Button saveButton = findViewById(R.id.save_button);
         saveButton.setOnClickListener(new View.OnClickListener() {
@@ -117,5 +139,10 @@ public class EditReceipt extends AppCompatActivity {
 
         DatabaseHandler dbHandler = new DatabaseHandler(this);
         dbHandler.addBudgetItem(newItem);
+    }
+
+    @Override
+    public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
+        dateTxt.setText(String.format("%d/%d/%d", (monthOfYear + 1), dayOfMonth, year));
     }
 }
