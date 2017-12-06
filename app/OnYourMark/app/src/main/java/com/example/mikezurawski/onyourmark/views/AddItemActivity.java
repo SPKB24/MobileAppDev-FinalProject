@@ -42,6 +42,7 @@ public class AddItemActivity extends AppCompatActivity {
     private Button buttonSelectImage;
     private Button takePhotoButton;
     private Button selectFromAlbumButtom;
+    private Button jumpToEditReceipt;
 
     private Uri imagUrl;
     private Bitmap bitmap;
@@ -78,20 +79,19 @@ public class AddItemActivity extends AppCompatActivity {
         editText.setText("");
 
         // Launch take photo
-        takePhotoButton = (Button) findViewById(R.id.buttonTakePhoto);
-        takePhotoButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                takePhoto();
-            }
-        });
+        takePhotoButton = findViewById(R.id.buttonTakePhoto);
+        takePhotoButton.setOnClickListener(view -> takePhoto());
 
         // Get photo from the gallery
-        selectFromAlbumButtom = (Button) findViewById(R.id.buttonAlbumPhoto);
-        selectFromAlbumButtom.setOnClickListener(new View.OnClickListener() {
+        selectFromAlbumButtom = findViewById(R.id.buttonAlbumPhoto);
+        selectFromAlbumButtom.setOnClickListener(view -> selectImageInAlbum());
+
+        jumpToEditReceipt = findViewById(R.id.buttonEditReceipt);
+        jumpToEditReceipt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                selectImageInAlbum();
+                Intent intent = new Intent(AddItemActivity.this, EditReceipt.class);
+                startActivity(intent);
             }
         });
     }
@@ -99,22 +99,52 @@ public class AddItemActivity extends AppCompatActivity {
     // Called when image selection is done.
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Log.d("AnalyzeActivity", "onActivityResult");
+        switch (requestCode) {
+            case REQUEST_TAKE_PHOTO:
+                if (resultCode == RESULT_OK) {
+                    Intent intent = new Intent();
+                    intent.setData(Uri.fromFile(mFilePhotoTaken));
+                    setResult(RESULT_OK, intent);
 
-        imagUrl = data.getData();
+                    // Set the photo taken to be analyzed
+                    bitmap = ImageHelper.loadSizeLimitedBitmapFromUri(
+                            Uri.fromFile(mFilePhotoTaken), getContentResolver());
 
-        bitmap = ImageHelper.loadSizeLimitedBitmapFromUri(
-                imagUrl, getContentResolver());
-        if (bitmap != null) {
-            // Show the image on screen.
-            ImageView imageView = (ImageView) findViewById(R.id.selectedImage);
-            imageView.setImageBitmap(bitmap);
+                    // Start analyzing
+                    doRecognize();
+                }
+                break;
+            case REQUEST_SELECT_IMAGE_IN_ALBUM:
+                if (resultCode == RESULT_OK) {
+                    if (requestCode == REQUEST_SELECT_IMAGE_IN_ALBUM) {
+                        Uri selectedImageUri = data.getData();
+                        selectedImagePath = getPath(selectedImageUri);
+                        Intent intent = new Intent();
+                        intent.setData(selectedImageUri);
+                        setResult(RESULT_OK, intent);
 
-            // Add detection log.
-            Log.d("AnalyzeActivity", "Image: " + imagUrl + " resized to " + bitmap.getWidth()
-                    + "x" + bitmap.getHeight());
+                        Log.d("AnalyzeActivity", "onActivityResult");
 
-            doRecognize();
+                        imagUrl = data.getData();
+
+                        bitmap = ImageHelper.loadSizeLimitedBitmapFromUri(
+                                imagUrl, getContentResolver());
+                        if (bitmap != null) {
+                            // Show the image on screen.
+                            ImageView imageView = (ImageView) findViewById(R.id.selectedImage);
+                            imageView.setImageBitmap(bitmap);
+
+                            // Add detection log.
+                            Log.d("AnalyzeActivity", "Image: " + imagUrl + " resized to " + bitmap.getWidth()
+                                    + "x" + bitmap.getHeight());
+
+                            doRecognize();
+                        }
+                    }
+                }
+                break;
+            default:
+                break;
         }
     }
 

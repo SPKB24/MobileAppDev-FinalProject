@@ -11,6 +11,10 @@ import android.widget.Toast;
 
 import com.example.mikezurawski.onyourmark.R;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class EditReceipt extends AppCompatActivity {
 
     @Override
@@ -26,11 +30,9 @@ public class EditReceipt extends AppCompatActivity {
             editText.setText(value, TextView.BufferType.EDITABLE);
         }
 
-        EditText editTextCompany = (EditText)findViewById(R.id.editCompany);
-        editTextCompany.setText("Chiptole", TextView.BufferType.EDITABLE);
-
+        String currentDateTimeString = DateFormat.getDateInstance().format(new Date());
         EditText editTextDate = (EditText)findViewById(R.id.editDate);
-        editTextDate.setText("Date", TextView.BufferType.EDITABLE);
+        editTextDate.setText(currentDateTimeString, TextView.BufferType.EDITABLE);
 
         Button saveButton = (Button) findViewById(R.id.save_button);
         saveButton.setOnClickListener(new View.OnClickListener() {

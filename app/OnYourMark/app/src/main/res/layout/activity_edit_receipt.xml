@@ -37,11 +37,36 @@
                     <EditText
                         android:id="@+id/editTotal"
                         android:hint="@string/total"
-                        android:inputType="number"
+                        android:inputType="numberDecimal"
                         style="@style/EditorFieldStyle" />
 
                 </LinearLayout>
             </LinearLayout>
+
+            <!--<LinearLayout-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:orientation="horizontal">-->
+
+                <!--<TextView-->
+                    <!--android:text="@string/edit_company"-->
+                    <!--style="@style/CategoryStyle" />-->
+
+                <!--<LinearLayout-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_width="0dp"-->
+                    <!--android:layout_weight="2"-->
+                    <!--android:paddingStart="2dp"-->
+                    <!--android:orientation="vertical">-->
+
+                    <!--<EditText-->
+                        <!--android:id="@+id/editCompany"-->
+                        <!--android:hint="@string/company"-->
+                        <!--android:inputType="text"-->
+                        <!--style="@style/EditorFieldStyle" />-->
+
+                <!--</LinearLayout>-->
+            <!--</LinearLayout>-->
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -49,32 +74,7 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:text="@string/edit_company"
-                    style="@style/CategoryStyle" />
-
-                <LinearLayout
-                    android:layout_height="wrap_content"
-                    android:layout_width="0dp"
-                    android:layout_weight="2"
-                    android:paddingStart="2dp"
-                    android:orientation="vertical">
-
-                    <EditText
-                        android:id="@+id/editCompany"
-                        android:hint="@string/company"
-                        android:inputType="text"
-                        style="@style/EditorFieldStyle" />
-
-                </LinearLayout>
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:text="Date thing here"
+                    android:text="Date"
                     style="@style/CategoryStyle" />
 
                 <LinearLayout
@@ -86,9 +86,36 @@
 
                     <EditText
                         android:id="@+id/editDate"
-                        android:hint="Date thing here"
+                        android:hint="Date"
                         android:inputType="text"
                         style="@style/EditorFieldStyle" />
+
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:text="Choose Category"
+                    style="@style/CategoryStyle" />
+
+                <LinearLayout
+                    android:layout_height="wrap_content"
+                    android:layout_width="0dp"
+                    android:layout_weight="2"
+                    android:paddingStart="2dp"
+                    android:paddingTop="14dp"
+                    android:orientation="vertical">
+
+                    <Spinner
+                        android:id="@+id/mySpinner"
+                        android:layout_width="match_parent"
+                        android:entries="@array/categories_array"
+                        android:prompt="@string/category"
+                        android:layout_height="wrap_content" />
 
                 </LinearLayout>
             </LinearLayout>
