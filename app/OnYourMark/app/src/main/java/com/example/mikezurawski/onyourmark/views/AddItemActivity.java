@@ -343,28 +343,29 @@ public class AddItemActivity extends AppCompatActivity {
                     int totalIndex = myList.indexOf("total");
                     int taxIndex = myList.indexOf("tax");
                     String strTotal = "";
-
-                    if(subtotalIndex >= 0 ) {
-                        // Subtotal found, need to add tax to subtotal
-                        strTotal = getNumbers(myList, subtotalIndex);
-
-                        // Try to get tax
-                        String tax = "";
-                        if(taxIndex >= 0) {
-                            tax = getNumbers(myList, taxIndex);
-                            try {
-                                double mytax = Double.parseDouble(addDecimal(tax));
-                                double mytotal = Double.parseDouble(addDecimal(strTotal));
-                                receiptTotal = String.valueOf(mytax + mytotal);
-                            } catch (Exception e) {
-                                receiptTotal = "";
-                                // no si
-                            }
-                        } else {
-                            receiptTotal = strTotal;
-                        }
-                    }
-                    else if(totalIndex >= 0) {
+//
+//                    if(subtotalIndex >= 0 ) {
+//                        // Subtotal found, need to add tax to subtotal
+//                        strTotal = getNumbers(myList, subtotalIndex);
+//
+//                        // Try to get tax
+//                        String tax = "";
+//                        if(taxIndex >= 0) {
+//                            tax = getNumbers(myList, taxIndex);
+//                            try {
+//                                double mytax = Double.parseDouble(addDecimal(tax));
+//                                double mytotal = Double.parseDouble(addDecimal(strTotal));
+//                                receiptTotal = String.valueOf(mytax + mytotal);
+//                            } catch (Exception e) {
+//                                receiptTotal = "";
+//                                // no si
+//                            }
+//                        } else {
+//                            receiptTotal = strTotal;
+//                        }
+//                    }
+//                    else
+                    if(totalIndex >= 0) {
                         strTotal = getNumbers(myList, totalIndex);
                         strTotal = addDecimal(strTotal);
                         receiptTotal = strTotal;
