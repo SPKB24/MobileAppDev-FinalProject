@@ -24,7 +24,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 // Key 1 - 22126be1efca48c6bf1f8fc6fe085bc6
@@ -53,26 +56,26 @@ public class MainActivity extends AppCompatActivity {
 
         new HamburgerMenuHandler(this, R.id.toolbar, "On Your Mark").init_homepage();
 
-        monthly_breakdown_layout = findViewById(R.id.monthly_breakdown_items);
+        monthly_breakdown_layout = findViewById(R.id.monthly_breakdown_categories_layout);
         no_monthly_data_layout = findViewById(R.id.no_information);
 
         monthly_summary_chart = (PieChart) findViewById(R.id.monthly_summary_chart);
         monthly_breakdown_chart = (PieChart) findViewById(R.id.monthly_breakdown_chart);
 
         database = new DatabaseHandler(this);
-        database.resetDB();
-        final Random rand = new Random();
-
-        for (int i = 0; i < 50; i++) {
-            BudgetItem budgetItem = new BudgetItem();
-            final double cost = rand.nextDouble() * (100.00 - 1.50) + 1.50;
-            budgetItem.setCategory(rand.nextInt(5));
-            budgetItem.setCost(round(cost, 2));
-            Calendar cal = Calendar.getInstance();
-            cal.set(2017, rand.nextInt(12), 9);
-            budgetItem.setDate(cal.getTime());
-            database.addBudgetItem(budgetItem);
-        }
+//        database.resetDB();
+//        final Random rand = new Random();
+//
+//        for (int i = 0; i < 50; i++) {
+//            BudgetItem budgetItem = new BudgetItem();
+//            final double cost = rand.nextDouble() * (100.00 - 1.50) + 1.50;
+//            budgetItem.setCategory(rand.nextInt(5));
+//            budgetItem.setCost(round(cost, 2));
+//            Calendar cal = Calendar.getInstance();
+//            cal.set(2017, rand.nextInt(12), 9);
+//            budgetItem.setDate(cal.getTime());
+//            database.addBudgetItem(budgetItem);
+//        }
 
         Calendar cal = Calendar.getInstance();
         cal.setTime(new Date());
@@ -107,15 +110,12 @@ public class MainActivity extends AppCompatActivity {
 
         refreshInformation();
         debugLogs();
-
-        addNewCategoryItem("Category Name", 200.0f);
     }
 
     private void debugLogs() {
         String toPrint = "";
         for (BudgetItem item : database.getBudgetItems()) {
-            toPrint += " | id: " + item.getId()
-                    + " | category: " + item.getCategory()
+            toPrint += " | category: " + item.getCategory()
                     + " | date: " + item.getDate()
                     + " | cost: " + item.getCost()
                     + " |\n";
@@ -204,33 +204,36 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void refreshMonthlyBreakdownGraph() {
-        System.out.println("*** START ***");
-        for (BudgetItem budgetItem : monthlyItems) {
-            System.out.println("id: " + budgetItem.getId());
-            System.out.println("cate: " + budgetItem.getCategory());
-            System.out.println("cost" + budgetItem.getCost());
-        }
-        System.out.println("*** END ***");
+        clearCategoriesOnCreate();
 
-        double[] spentPerCategory = new double[6];
+        HashMap<String, Double> categoryMap = new HashMap<>();
         double totalSpent = 0;
 
-        Arrays.fill(spentPerCategory, 0);
-        for (BudgetItem budgetItem : monthlyItems) {
-            spentPerCategory[budgetItem.getCategory()] += budgetItem.getCost();
+        for (BudgetItem budgetItem: monthlyItems) {
+            String category = DatabaseHandler.getCategoryString(budgetItem.getCategory());
+
+            if (!categoryMap.containsKey(category))
+                categoryMap.put(category, budgetItem.getCost());
+            else {
+                categoryMap.put(category, categoryMap.get(category) + budgetItem.getCost());
+            }
+
             totalSpent += budgetItem.getCost();
         }
 
+        Iterator it = categoryMap.entrySet().iterator();
         List<PieEntry> entries = new ArrayList<>();
+        while (it.hasNext()) {
+            Map.Entry pair = (Map.Entry) it.next();
+            addNewCategoryItem((String) pair.getKey(), (Double) pair.getValue());
 
-        for (double spentC : spentPerCategory) {
-            double rawPercentage = spentC / totalSpent;
+            double rawPercentage = (Double) pair.getValue() / totalSpent;
             float percentage = (float) rawPercentage;
-            entries.add(new PieEntry(percentage, ""));
+            entries.add(new PieEntry(percentage, (String) pair.getKey()));
         }
 
         final int[] MY_COLORS = {Color.BLUE, Color.RED, Color.GRAY, Color.CYAN, Color.GREEN};
-        ArrayList<Integer> colors = new ArrayList<Integer>();
+        ArrayList<Integer> colors = new ArrayList<>();
 
         for(int c: MY_COLORS) colors.add(c);
 
@@ -249,13 +252,17 @@ public class MainActivity extends AppCompatActivity {
         monthly_breakdown_chart.invalidate(); // refresh
     }
 
-    private void addNewCategoryItem(final String category, final Float cost) {
+    private void clearCategoriesOnCreate() {
+        monthly_breakdown_layout.removeAllViews();
+    }
+
+    private void addNewCategoryItem(final String category, final Double cost) {
         LinearLayout rowToAdd = (LinearLayout) getLayoutInflater().inflate(R.layout.monthly_breakdown_row_item, null);
 
-        TextView categoryTextView = (TextView) rowToAdd.findViewById(R.id.row_category_text);
+        TextView categoryTextView = rowToAdd.findViewById(R.id.row_category_text);
         categoryTextView.setText(category);
 
-        TextView costTextView = (TextView) rowToAdd.findViewById(R.id.row_cost_text);
+        TextView costTextView = rowToAdd.findViewById(R.id.row_cost_text);
         costTextView.setText(String.format("$%.2f", cost));
 
         monthly_breakdown_layout.addView(rowToAdd);

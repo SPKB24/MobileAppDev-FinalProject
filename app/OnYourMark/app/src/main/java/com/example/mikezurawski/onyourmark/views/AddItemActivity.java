@@ -15,7 +15,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.mikezurawski.onyourmark.R;
 import com.google.gson.Gson;
@@ -40,12 +42,13 @@ import static org.apache.commons.lang.StringUtils.isNumeric;
 public class AddItemActivity extends AppCompatActivity {
 
     private Button takePhotoButton;
-    private Button selectFromAlbumButtom;
+    private Button selectFromAlbumBottom;
     private Button jumpToEditReceipt;
+
+    private ProgressBar progressBar;
 
     private Uri imagUrl;
     private Bitmap bitmap;
-    private EditText editText;
     private VisionServiceClient client;
     private int retryCountThreshold = 30;
     private final static String MY_TAG = "myapp";
@@ -67,21 +70,32 @@ public class AddItemActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_item);
 
+        new HamburgerMenuHandler(this, R.id.toolbar_add_item, "Add New Item").init_subpage(false);
+
         if (client == null) {
             client = new VisionServiceRestClient(getString(R.string.subscription_key),
                     "https://westcentralus.api.cognitive.microsoft.com/vision/v1.0");
         }
 
-        editText = (EditText) findViewById(R.id.editTextResult);
-        editText.setText("");
+        progressBar = findViewById(R.id.progress_spinner);
 
         // Launch take photo
         takePhotoButton = findViewById(R.id.buttonTakePhoto);
-        takePhotoButton.setOnClickListener(view -> takePhoto());
+        takePhotoButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                takePhoto();
+            }
+        });
 
         // Get photo from the gallery
-        selectFromAlbumButtom = findViewById(R.id.buttonAlbumPhoto);
-        selectFromAlbumButtom.setOnClickListener(view -> selectImageInAlbum());
+        selectFromAlbumBottom = findViewById(R.id.buttonAlbumPhoto);
+        selectFromAlbumBottom.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                selectImageInAlbum();
+            }
+        });
 
         jumpToEditReceipt = findViewById(R.id.buttonEditReceipt);
         jumpToEditReceipt.setOnClickListener(new View.OnClickListener() {
@@ -146,15 +160,16 @@ public class AddItemActivity extends AppCompatActivity {
     }
 
     public void doRecognize() {
-        selectFromAlbumButtom.setEnabled(false);
+        selectFromAlbumBottom.setEnabled(false);
         takePhotoButton.setEnabled(false);
+        jumpToEditReceipt.setEnabled(false);
 
-        editText.setText("Analyzing...");
+        progressBar.setVisibility(View.VISIBLE);
 
         try {
             new doRequest(this).execute();
         } catch (Exception e) {
-            editText.setText("Error encountered. Exception is: " + e.toString());
+            Toast.makeText(this, "Something went wrong", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -209,7 +224,7 @@ public class AddItemActivity extends AppCompatActivity {
                     .getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
             cursor.moveToFirst();
             String path = cursor.getString(column_index);
-            cursor.close();
+            //cursor.close(); // The app doesn't like this line
             return path;
         }
         return uri.getPath();
@@ -294,7 +309,7 @@ public class AddItemActivity extends AppCompatActivity {
             }
             // Display based on error existence
             if (e != null) {
-                recognitionActivity.get().editText.setText("Error in onPostExecute: " + e.getMessage());
+                //recognitionActivity.get().editText.setText("Error in onPostExecute: " + e.getMessage());
                 this.e = null;
             } else {
                 Gson gson = new Gson();
@@ -361,10 +376,13 @@ public class AddItemActivity extends AppCompatActivity {
                     resultBuilder.append("\n");
                 }
 
-                recognitionActivity.get().editText.setText(resultBuilder);
+                //recognitionActivity.get().editText.setText(resultBuilder);
             }
             recognitionActivity.get().takePhotoButton.setEnabled(true);
-            recognitionActivity.get().selectFromAlbumButtom.setEnabled(true);
+            recognitionActivity.get().selectFromAlbumBottom.setEnabled(true);
+            recognitionActivity.get().jumpToEditReceipt.setEnabled(true);
+
+            progressBar.setVisibility(View.GONE);
 
             // Give EditReceipt Activity the total
             Intent i = new Intent(getApplicationContext(), EditReceipt.class);

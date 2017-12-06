@@ -129,7 +129,9 @@ class HamburgerMenuHandler {
                 activity.finish();
 
                 if (shouldReloadOnReturn) {
-                    activity.startActivity(new Intent(activity, MainActivity.class));
+                    Intent i = new Intent(activity, MainActivity.class);
+                    i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    activity.startActivity(i);
                 }
             }
         });
