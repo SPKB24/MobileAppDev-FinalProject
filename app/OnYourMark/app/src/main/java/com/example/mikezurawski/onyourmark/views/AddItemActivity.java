@@ -39,7 +39,6 @@ import static org.apache.commons.lang.StringUtils.isNumeric;
 
 public class AddItemActivity extends AppCompatActivity {
 
-    private Button buttonSelectImage;
     private Button takePhotoButton;
     private Button selectFromAlbumButtom;
     private Button jumpToEditReceipt;
@@ -74,8 +73,6 @@ public class AddItemActivity extends AppCompatActivity {
         }
 
         editText = (EditText) findViewById(R.id.editTextResult);
-
-        // Two buttons
         editText.setText("");
 
         // Launch take photo
