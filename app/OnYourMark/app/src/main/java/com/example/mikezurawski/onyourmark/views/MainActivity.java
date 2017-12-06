@@ -21,14 +21,12 @@ import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 
 // Key 1 - 22126be1efca48c6bf1f8fc6fe085bc6
 // Key 2 - b96d2cf4bc714de9b268660c3d8854b0
@@ -44,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
     int currentMonth = -1;
 
     LinearLayout monthly_breakdown_layout;
+    LinearLayout monthly_breakdown_categories;
     LinearLayout no_monthly_data_layout;
 
     PieChart monthly_summary_chart;
@@ -56,7 +55,8 @@ public class MainActivity extends AppCompatActivity {
 
         new HamburgerMenuHandler(this, R.id.toolbar, "On Your Mark").init_homepage();
 
-        monthly_breakdown_layout = findViewById(R.id.monthly_breakdown_categories_layout);
+        monthly_breakdown_layout = findViewById(R.id.monthly_breakdown_items);
+        monthly_breakdown_categories = findViewById(R.id.monthly_breakdown_categories_layout);
         no_monthly_data_layout = findViewById(R.id.no_information);
 
         monthly_summary_chart = (PieChart) findViewById(R.id.monthly_summary_chart);
@@ -253,7 +253,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void clearCategoriesOnCreate() {
-        monthly_breakdown_layout.removeAllViews();
+        monthly_breakdown_categories.removeAllViews();
     }
 
     private void addNewCategoryItem(final String category, final Double cost) {
@@ -265,6 +265,6 @@ public class MainActivity extends AppCompatActivity {
         TextView costTextView = rowToAdd.findViewById(R.id.row_cost_text);
         costTextView.setText(String.format("$%.2f", cost));
 
-        monthly_breakdown_layout.addView(rowToAdd);
+        monthly_breakdown_categories.addView(rowToAdd);
     }
 }
