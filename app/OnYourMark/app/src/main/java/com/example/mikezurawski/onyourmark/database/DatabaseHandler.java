@@ -130,20 +130,18 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         return "0"; // TODO: do
     }
 
-    private String getCategoryString(int i) {
+    public static String getCategoryString(int i) {
         switch(i) {
-            case 1:
-                return "FOOD";
-            case 2:
-                return "CLOTHES";
-            case 3:
-                return "GAS";
-            case 4:
-                return "UTILITIES";
             case 0:
-                return "MISC";
+                return "FOOD";
+            case 1:
+                return "CLOTHES";
+            case 2:
+                return "GAS";
+            case 3:
+                return "UTILITIES";
             default:
-                return "";
+                return "MISC";
         }
     }
 

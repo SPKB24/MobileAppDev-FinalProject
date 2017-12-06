@@ -24,7 +24,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 // Key 1 - 22126be1efca48c6bf1f8fc6fe085bc6
@@ -107,8 +110,6 @@ public class MainActivity extends AppCompatActivity {
 
         refreshInformation();
         debugLogs();
-
-        addNewCategoryItem("Category Name", 200.0f);
     }
 
     private void debugLogs() {
@@ -211,25 +212,38 @@ public class MainActivity extends AppCompatActivity {
         }
         System.out.println("*** END ***");
 
-        double[] spentPerCategory = new double[6];
+        HashMap<String, Double> categoryMap = new HashMap<>();
         double totalSpent = 0;
 
-        Arrays.fill(spentPerCategory, 0);
-        for (BudgetItem budgetItem : monthlyItems) {
-            spentPerCategory[budgetItem.getCategory()] += budgetItem.getCost();
+        for (BudgetItem budgetItem: monthlyItems) {
+            String category = DatabaseHandler.getCategoryString(budgetItem.getCategory());
+
+            if (!categoryMap.containsKey(category))
+                categoryMap.put(category, budgetItem.getCost());
+            else {
+                categoryMap.put(category, categoryMap.get(category) + budgetItem.getCost());
+            }
+
             totalSpent += budgetItem.getCost();
+        }
+
+        Iterator it = categoryMap.entrySet().iterator();
+        while (it.hasNext()) {
+            Map.Entry pair = (Map.Entry) it.next();
+
+            addNewCategoryItem((String) pair.getKey(), (Double) pair.getValue());
         }
 
         List<PieEntry> entries = new ArrayList<>();
 
-        for (double spentC : spentPerCategory) {
+        for (double spentC : categoryMap.values()) {
             double rawPercentage = spentC / totalSpent;
             float percentage = (float) rawPercentage;
             entries.add(new PieEntry(percentage, ""));
         }
 
         final int[] MY_COLORS = {Color.BLUE, Color.RED, Color.GRAY, Color.CYAN, Color.GREEN};
-        ArrayList<Integer> colors = new ArrayList<Integer>();
+        ArrayList<Integer> colors = new ArrayList<>();
 
         for(int c: MY_COLORS) colors.add(c);
 
@@ -248,7 +262,7 @@ public class MainActivity extends AppCompatActivity {
         monthly_breakdown_chart.invalidate(); // refresh
     }
 
-    private void addNewCategoryItem(final String category, final Float cost) {
+    private void addNewCategoryItem(final String category, final Double cost) {
         LinearLayout rowToAdd = (LinearLayout) getLayoutInflater().inflate(R.layout.monthly_breakdown_row_item, null);
 
         TextView categoryTextView = (TextView) rowToAdd.findViewById(R.id.row_category_text);
