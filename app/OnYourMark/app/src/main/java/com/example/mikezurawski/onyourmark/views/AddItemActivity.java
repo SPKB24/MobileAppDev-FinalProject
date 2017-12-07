@@ -29,13 +29,19 @@ import com.microsoft.projectoxford.vision.contract.HandwritingTextLine;
 import com.microsoft.projectoxford.vision.contract.HandwritingTextWord;
 import com.microsoft.projectoxford.vision.rest.VisionServiceException;
 
+import org.apache.commons.lang.StringUtils;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static org.apache.commons.lang.StringUtils.isNumeric;
 
@@ -304,6 +310,14 @@ public class AddItemActivity extends AppCompatActivity {
         protected void onPostExecute(String data) {
             super.onPostExecute(data);
 
+            Pattern datePattern = Pattern.compile("(\\d{2})/(\\d{2})/(\\d{4})");
+            Date date = null;
+
+            Pattern priceIndicatorPattern = Pattern.compile("((?<!SUB)TOTAL|BALANCEDUE|GRANDTOTAL|CASHDUE)");
+            //Pattern pricePattern = Pattern.compile("\\d*(\\.\\d{2})?$");
+            Pattern pricePattern = Pattern.compile("[0-9]*(\\.[0-9][0-9])?$");
+            String price = null;
+
             if (recognitionActivity.get() == null) {
                 return;
             }
@@ -321,63 +335,32 @@ public class AddItemActivity extends AppCompatActivity {
                     resultBuilder.append("Error: Recognition Failed");
                 } else {
                     // Getting lines
-                    List<String> myList = new ArrayList<String>();
+                    boolean PRICE_ON_NEXT_LINE = false;
 
                     // Parse from response
                     for (HandwritingTextLine line : r.getRecognitionResult().getLines()) {
-                        // Getting words
-                        for (HandwritingTextWord word : line.getWords()) {
-                            resultBuilder.append(word.getText() + " ");
-                            // Add words to list for parsing
-                            myList.add(word.getText().toLowerCase());
+
+                        Matcher m = datePattern.matcher(line.getText().replaceAll("\\s", ""));
+                        if (date == null && m.find()) {
+                            Calendar cal = Calendar.getInstance();
+                            cal.set(Integer.parseInt(m.group(3)), Integer.parseInt(m.group(1)), Integer.parseInt(m.group(2)));
+                            date = cal.getTime();
                         }
-                        resultBuilder.append("\n");
-                    }
-                    // print for testing
-                    for (String w : myList) {
-                        Log.v(MY_TAG, w);
-                    }
 
-                    // Get subtotal
-                    int subtotalIndex = myList.indexOf("subtotal");
-                    int totalIndex = myList.indexOf("total");
-                    int taxIndex = myList.indexOf("tax");
-                    String strTotal = "";
-//
-//                    if(subtotalIndex >= 0 ) {
-//                        // Subtotal found, need to add tax to subtotal
-//                        strTotal = getNumbers(myList, subtotalIndex);
-//
-//                        // Try to get tax
-//                        String tax = "";
-//                        if(taxIndex >= 0) {
-//                            tax = getNumbers(myList, taxIndex);
-//                            try {
-//                                double mytax = Double.parseDouble(addDecimal(tax));
-//                                double mytotal = Double.parseDouble(addDecimal(strTotal));
-//                                receiptTotal = String.valueOf(mytax + mytotal);
-//                            } catch (Exception e) {
-//                                receiptTotal = "";
-//                                // no si
-//                            }
-//                        } else {
-//                            receiptTotal = strTotal;
-//                        }
-//                    }
-//                    else
-                    if(totalIndex >= 0) {
-                        strTotal = getNumbers(myList, totalIndex);
-                        strTotal = addDecimal(strTotal);
-                        receiptTotal = strTotal;
+                        String upperCaseLine = line.getText().toUpperCase().replaceAll("\\s","");
+                        m = priceIndicatorPattern.matcher(upperCaseLine);
+                        if ((price == null && m.find()) || PRICE_ON_NEXT_LINE) {
+                            Matcher a = pricePattern.matcher(upperCaseLine);
+
+                            if (a.find() && !a.group(0).isEmpty()) {
+                                price = a.group(0);
+                                PRICE_ON_NEXT_LINE = false;
+                            } else {
+                                PRICE_ON_NEXT_LINE = !PRICE_ON_NEXT_LINE;
+                            }
+                        }
                     }
-                    else {
-                    // Did not find anything
-                    receiptTotal = "";
-                    }
-                    resultBuilder.append("\n");
                 }
-
-                //recognitionActivity.get().editText.setText(resultBuilder);
             }
             recognitionActivity.get().takePhotoButton.setEnabled(true);
             recognitionActivity.get().selectFromAlbumBottom.setEnabled(true);
@@ -387,8 +370,27 @@ public class AddItemActivity extends AppCompatActivity {
 
             // Give EditReceipt Activity the total
             Intent i = new Intent(getApplicationContext(), EditReceipt.class);
-            i.putExtra("total", receiptTotal);
+
+            if (price != null && !price.isEmpty()) {
+                price = addDecimal(price);
+                i.putExtra("total", price);
+            }
+
+            if (date != null) {
+                i.putExtra("date",
+                        String.format("%d/%d/%d",
+                                getFromDate(date, Calendar.MONTH),
+                                getFromDate(date, Calendar.DAY_OF_WEEK),
+                                getFromDate(date, Calendar.YEAR)));
+            }
+
             startActivity(i);
+        }
+
+        private Integer getFromDate(final Date date, final int type) {
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(date);
+            return cal.get(type);
         }
 
         /**
