@@ -45,6 +45,8 @@ public class EditReceipt extends AppCompatActivity implements DatePickerDialog.O
         dateTxt = findViewById(R.id.editDate);
         categoryChoice = findViewById(R.id.mySpinner);
 
+        new HamburgerMenuHandler(this, R.id.toolbar_settings, "Edit Receipt").init_subpage(false);
+
         // Set edit text field
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
