@@ -51,11 +51,19 @@ public class EditReceipt extends AppCompatActivity implements DatePickerDialog.O
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             String value = extras.getString("total");
-            totalTxt.setText(value, TextView.BufferType.EDITABLE);
+            if (value != null)
+                totalTxt.setText(value, TextView.BufferType.EDITABLE);
+
+            value = extras.getString("date");
+            if (value != null)
+                dateTxt.setText(value);
         }
 
-        dateFormat = new SimpleDateFormat("MM/dd/yyyy");
-        dateTxt.setText(dateFormat.format(new Date()), TextView.BufferType.EDITABLE);
+        if (dateTxt.getText().toString().isEmpty()) {
+            dateFormat = new SimpleDateFormat("MM/dd/yyyy");
+            dateTxt.setText(dateFormat.format(new Date()), TextView.BufferType.EDITABLE);
+        }
+
         dateTxt.setFocusable(false);
         dateTxt.setFocusableInTouchMode(false);
         dateTxt.setOnClickListener(new View.OnClickListener() {
