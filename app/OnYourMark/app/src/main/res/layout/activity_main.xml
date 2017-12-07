@@ -44,7 +44,7 @@
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="match_parent"
-            android:text="December"
+            android:text="@string/december"
             android:textAllCaps="true"/>
 
         <Button
@@ -89,7 +89,7 @@
                     android:paddingEnd="10dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Monthly Summary"/>
+                    android:text="@string/monthly_summary"/>
 
                 <LinearLayout
                     android:orientation="horizontal"
@@ -135,7 +135,7 @@
                                 android:textColor="@color/colorRed"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="SPENT"/>
+                                android:text="@string/spent"/>
 
                             <TextView
                                 android:id="@+id/monthly_summary_spent_txt"
@@ -143,7 +143,7 @@
                                 android:layout_alignParentEnd="true"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="$200.00"/>
+                                android:text="@string/_200_00"/>
                         </RelativeLayout>
 
                         <!-- Remaining Information -->
@@ -158,7 +158,7 @@
                                 android:textColor="@color/colorBlue"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="REMAINING"/>
+                                android:text="@string/remaining"/>
 
                             <TextView
                                 android:id="@+id/monthly_summary_remaining_txt"
@@ -166,7 +166,7 @@
                                 android:layout_alignParentEnd="true"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="$0.00"/>
+                                android:text="@string/_0_00"/>
 
                         </RelativeLayout>
 
@@ -189,7 +189,7 @@
                                 android:textColor="@color/colorWhite"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="TOTAL"/>
+                                android:text="@string/totalll"/>
 
                             <TextView
                                 android:id="@+id/monthly_summary_total_txt"
@@ -198,7 +198,7 @@
                                 android:layout_alignParentEnd="true"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="$0.00"/>
+                                android:text="@string/_0_00"/>
 
                         </RelativeLayout>
 
@@ -225,7 +225,7 @@
                     android:paddingEnd="10dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Monthly Breakdown"/>
+                    android:text="@string/monthly_breakdown"/>
 
                 <!-- Monthly Breakdown Items List -->
                 <LinearLayout
@@ -271,18 +271,18 @@
                         android:textColor="@color/colorWhite"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Uh oh! Looks like you don't have any data"/>
+                        android:text="@string/uh_oh_looks_like_you_don_t_have_any_data"/>
                     <TextView
                         android:textColor="@color/colorWhite"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Click on the button below to add your first budget"/>
+                        android:text="@string/click_on_the_button_below_to_add_your_first_budget"/>
                     <Button
                         android:id="@+id/new_item_btn"
                         android:layout_marginTop="10dp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Add Item"/>
+                        android:text="@string/add_item"/>
                 </LinearLayout>
 
             </LinearLayout>

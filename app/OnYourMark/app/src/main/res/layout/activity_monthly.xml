@@ -26,7 +26,7 @@
             style="@style/title_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="NOV"/>
+            android:text="@string/nov"/>
 
         <Button
             android:id="@+id/forward_month_btn"
@@ -49,12 +49,12 @@
                 style="@style/mega_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="SPENT"/>
+                android:text="@string/spent"/>
             <TextView
                 style="@style/mega_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="$3,534"/>
+                android:text="@string/_3_534"/>
         </LinearLayout>
         <View
             android:layout_width="0dp"
@@ -69,12 +69,12 @@
                 style="@style/mega_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="LEFT"/>
+                android:text="@string/left"/>
             <TextView
                 style="@style/mega_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="$10,500"/>
+                android:text="@string/_10_500"/>
         </LinearLayout>
     </LinearLayout>
 
